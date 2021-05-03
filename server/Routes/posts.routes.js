@@ -6,7 +6,17 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 router.get('/', async(req, res) => {
-  const getPostsQuery = await db.query('SELECT * FROM posts ORDER BY created_at DESC')
+  const getPostsQuery = await db.query(`SELECT
+                                          post_id, post_title, post_body, posts.post_flair, posts.created_at, posts.username, posts.is_edited, posts.username,
+                                          COUNT(comments.parent_postid) As "comment_count"
+                                        FROM
+                                          posts
+                                        LEFT JOIN
+                                          comments ON posts.post_id = comments.parent_postid
+                                        GROUP BY
+                                          posts.post_id
+                                        ORDER BY 
+                                          posts.created_at DESC`)
 
 
   res.status(200).json(
@@ -22,11 +32,12 @@ router.get('/:postID', async(req, res) => {
 
   try {
     const getSinglePostQuery = await db.query('SELECT * FROM posts WHERE post_id = $1', [postID])
-
+    const getPostCommentsQuery = await db.query('SELECT * FROM comments WHERE parent_postid = $1 ORDER BY created_at DESC', [postID])
     res.status(200).json(
       {
-        post: getSinglePostQuery.rows,
-        count: getSinglePostQuery.rowCount
+        post: getSinglePostQuery.rows[0],
+        comments: getPostCommentsQuery.rows,
+        commentCount: getPostCommentsQuery.rowCount
       }
     )
   } catch(err) {

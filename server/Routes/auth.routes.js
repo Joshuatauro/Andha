@@ -64,9 +64,24 @@ router.post('/login', async(req, res) => {
     }, 
     process.env.JWT_SECRET
   )
+  res.cookie('jwtToken', token, { httpOnly: true } ).json({message: "Logged in successfully", logUserIn: true})
+})
 
-  res.cookie('jwtToken', token, { httpOnly: true } ).json({message: "Logged in successfully"})
+router.get('/check-auth-status', async(req, res) => {
+  try {
 
+    const userToken = req.cookies.jwtToken
+
+    const { username } = jwt.verify(userToken, process.env.JWT_SECRET)
+
+    if(userToken) return res.status(200).json({isLoggedIn: true, username})
+
+    if(!userToken) return res.status(404).json({isLoggedIn: false})
+
+
+  } catch(err) {
+    res.json({message: err})
+  }
 })
 
 
