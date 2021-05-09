@@ -23,5 +23,5 @@ LEFT JOIN
     reviews ON reviews.company_name = companies.company_name
 GROUP BY
     companies.company_name
-ORDER BY 
+ORDER BY    
     company_rating ASC;

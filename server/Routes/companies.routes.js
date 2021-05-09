@@ -46,8 +46,8 @@ router.get("/", async(req, res) => {
   try{
 
     const getTopCompaniesQuery = await db.query(`SELECT
-                                                    company_id, companies.company_name, company_industry, company_website,
-                                                    AVG(reviews.review_rating) As "company_rating"
+                                                    company_id, companies.company_name, company_industry, company_website, company_founded, company_location, company_about, company_size,
+                                                    AVG(reviews.review_rating) As "company_rating", COUNT(reviews.review_rating) AS "total_reviews"
                                                 FROM
                                                     companies
                                                 LEFT JOIN
@@ -60,7 +60,7 @@ router.get("/", async(req, res) => {
 
     res.json(
       {
-        message: getTopCompaniesQuery.rows
+        companies: getTopCompaniesQuery.rows
       }
     )
 

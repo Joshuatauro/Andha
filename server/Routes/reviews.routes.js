@@ -22,7 +22,7 @@ router.post('/add', async(req, res) => {
 
     if(!username) return res.status(401).json({message: 'Not authorized'})
 
-    const addReviewQuery = await db.query('INSERT INTO reviews (review_body, review_rating, review_created_at, company_name, user_position) VALUES ($1, $2, $3, $4, $5) returning *', [reviewBody, reviewRating, reviewCreatedAt, companyName, userPosition])
+    const addReviewQuery = await db.query('INSERT INTO reviews (review_body, review_rating, review_created_at, company_name, user_position, username) VALUES ($1, $2, $3, $4, $5, $6) returning *', [reviewBody, reviewRating, reviewCreatedAt, companyName, userPosition, username])
 
     res.status(200).json(
       {
