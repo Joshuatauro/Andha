@@ -12,15 +12,13 @@ const Navbar = () => {
   GetUserPreference()
 
   useEffect(() => {
-    console.log('ir2qewo')
     checkUserLoggedIn()
-    
   }, [])
 
   return (
     <nav  
-    className="dark:bg-dark-post dark:border-transparent
-    transition-all duration-500 flex sticky top-0  w-auto bg-white font-noto h-16 border-b-2 border-gray-300">
+    className="dark:bg-dark-post dark:border-transparent dark:border-dark-flair
+    transition-all duration-500 flex sticky top-0 z-50  w-auto bg-white font-noto h-16 border-b-2 border-gray-300">
       <div className="w-11/12 m-auto flex justify-between items-center    ">
         <h1 onClick={useDarkMode} className='dark:bg-dark-flair dark:text-white font-bold text-xl py-2 px-4 bg-blue-special text-white rounded-lg'>JOBIFY</h1>
         <ul className="flex">
