@@ -12,10 +12,11 @@ router.post("/add", async(req, res) => {
   const companyAbout = req.body.companyAbout
   const companyLocation = req.body.companyLocation
   const companyFounded = req.body.companyFounded
+  const companyLogo = req.body.companyLogo
 
   try {
 
-    if(!companySize || !companyWebsite || !companyName || !companyAbout || !companyLocation || !companyIndustry) return res.status(400).json({message: "Missing fields"})
+    if(!companySize || !companyWebsite || !companyName || !companyAbout || !companyLocation || !companyIndustry || !companyLogo) return res.status(400).json({message: "Missing fields"})
 
     const userToken = req.cookies.jwtToken
 
@@ -25,7 +26,7 @@ router.post("/add", async(req, res) => {
 
     if(!username) return res.status(401).json({message: 'Not authorized'})
 
-    const addToCompaniesQuery = await db.query('INSERT INTO companies (company_name, company_industry, company_location, company_about, company_founded, company_website, company_size) VALUES ($1, $2, $3, $4, $5, $6, $7) returning *', [companyName, companyIndustry, companyLocation, companyAbout, companyFounded, companyWebsite, companySize])
+    const addToCompaniesQuery = await db.query('INSERT INTO companies (company_name, company_industry, company_location, company_about, company_founded, company_website, company_size, company_logo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) returning *', [companyName, companyIndustry, companyLocation, companyAbout, companyFounded, companyWebsite, companySize, companyLogo])
     res.status(200).json(
       {
         message: 'Added company successfully',
@@ -44,9 +45,8 @@ router.post("/add", async(req, res) => {
 router.get("/", async(req, res) => {
 
   try{
-
     const getTopCompaniesQuery = await db.query(`SELECT
-                                                    company_id, companies.company_name, company_industry, company_website, company_founded, company_location, company_about, company_size,
+                                                    company_id, companies.company_name, company_industry, company_website, company_founded, company_location, company_about, company_size, company_logo,
                                                     AVG(reviews.review_rating) As "company_rating", COUNT(reviews.review_rating) AS "total_reviews"
                                                 FROM
                                                     companies
@@ -65,9 +65,47 @@ router.get("/", async(req, res) => {
     )
 
   } catch(err) {
-
+    res.status(400).json(
+      {
+        message: err.message
+      }
+    )
   }
 })
 
+router.get("/:companyName", async(req, res) => {
+  console.log('object')
+  const companyName = req.params.companyName
+  try{
+
+    const getCompanyDetails = await db.query(`SELECT
+                                                  company_id, companies.company_name, company_industry, company_website, company_founded, company_location, company_about, company_size, company_logo,
+                                                  AVG(reviews.review_rating) As "company_rating", COUNT(reviews.review_rating) AS "total_reviews"
+                                              FROM
+                                                  companies
+                                              LEFT JOIN
+                                                  reviews ON reviews.company_name = companies.company_name
+                                              GROUP BY
+                                                  companies.company_name
+                                              HAVING 
+                                                companies.company_name ILIKE $1`, [companyName])
+    const getCompanyReviews = await db.query('SELECT * FROM reviews WHERE company_name ILIKE $1', [companyName])
+
+    res.status(200).json(
+      {
+        companyDetails: getCompanyDetails.rows[0],
+        reviews: getCompanyReviews.rows,
+        doesCompanyExist: getCompanyDetails.rows ? true : false
+      }
+    )
+
+  } catch(err) {
+    res.status(400).json(
+      {
+        message: err.message
+      }
+    )
+  } 
+})
 
 module.exports = router

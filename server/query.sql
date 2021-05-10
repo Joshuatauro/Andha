@@ -25,3 +25,7 @@ GROUP BY
     companies.company_name
 ORDER BY    
     company_rating ASC;
+
+SELECT * FROM comments
+JOIN posts ON post_id = parent_postid
+WHERE parent_postid='8696cf1a-cd23-4278-8c5a-576dbedd50fe' 

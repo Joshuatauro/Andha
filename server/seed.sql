@@ -51,6 +51,7 @@ CREATE TABLE salaries (
 
 CREATE TABLE companies (
   company_id VARCHAR UNIQUE  DEFAULT uuid_generate_v4(),
+  company_logo VARCHAR,
   company_name VARCHAR PRIMARY KEY NOT NULL,
   company_industry VARCHAR NOT NULL,
   company_location VARCHAR NOT NULL,
