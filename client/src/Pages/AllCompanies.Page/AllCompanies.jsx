@@ -24,7 +24,7 @@ const AllCompanies = () => {
       <div className="py-4">
         {
           companies.map(company => (
-            <CompanyCard key={company.company_id} companyAbout={company.company_about} companyFounded={company.company_founded} companyIndustry={company.company_industry} companyID={company.company_id} companyLocation={company.company_location} companyRating={company.company_rating} companyName={company.company_name} companySize={company.company_size} companyWebsite={company.company_website} totalReviews={company.total_reviews}  />
+            <CompanyCard key={company.company_id} companyAbout={company.company_about} companyImage={company.company_logo} companyFounded={company.company_founded} companyIndustry={company.company_industry} companyID={company.company_id} companyLocation={company.company_location} companyRating={company.company_rating} companyName={company.company_name} companySize={company.company_size} companyWebsite={company.company_website} totalReviews={company.total_reviews}  />
             ))
           }
       </div>

@@ -5,6 +5,7 @@ import LandingPage from './Pages/Landing.Page/LandingPage';
 import SinglePostPage from './Pages/SinglePost.Page/SinglePostPage';
 import LoginPage from './Pages/Login.Page/LoginPage';
 import AllCompanies from './Pages/AllCompanies.Page/AllCompanies';
+import CompanyDetails from './Pages/CompanyDetails.Page/CompanyDetails';
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
               <Route path="/companies" exact>
                 <Navbar />
                 <AllCompanies />
+              </Route>
+              <Route path="/companies/:companyName" exact>
+                <Navbar />
+                <CompanyDetails />
               </Route>
             </Switch>
       </Router>
