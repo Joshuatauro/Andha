@@ -4,26 +4,28 @@ const jwt = require("jsonwebtoken");
 
 
 router.post('/add', async(req, res) => {
-  const reviewRating = req.body.reviewRating
-  const reviewBody = req.body.reviewBody
+  const reviewRating = req.body.rating
+  const reviewPros = req.body.pros
+  const reviewCons = req.body.cons
   const companyName = req.body.companyName
-  const userPosition = req.body.userPosition
+  const userPosition = req.body.position
+  const reviewTitle = req.body.title
   const reviewCreatedAt = new Date()
   
   try{
 
-    if(!reviewBody || !reviewRating || !companyName || !userPosition) return res.status(400).json({message: "Missing fields"})
+    if(!reviewPros || !reviewCons || !reviewRating || !companyName || !userPosition || !reviewTitle) return res.status(400).json({message: "Missing fields"})
 
-    const userToken = req.cookies.jwtToken
+    if(!req.userID) return res.status(401).json({message: 'Not authorized', wasAdded: false})
 
-    if(!userToken) return res.status(401).json({message: 'Not authorized'})
+    const userID = req.userID
+    const username = req.username
 
-    const { username } = jwt.verify(userToken, process.env.JWT_SECRET)
+    const userCompany = await db.query('SELECT company FROM users WHERE username = $1', [username])
+    if(companyName !== userCompany.rows[0].company) return res.status(401).json({message: "User does not work in the current company"})
 
-    if(!username) return res.status(401).json({message: 'Not authorized'})
-
-    const addReviewQuery = await db.query('INSERT INTO reviews (review_body, review_rating, review_created_at, company_name, user_position, username) VALUES ($1, $2, $3, $4, $5, $6) returning *', [reviewBody, reviewRating, reviewCreatedAt, companyName, userPosition, username])
-
+    const addReviewQuery = await db.query('INSERT INTO reviews (review_pros, review_rating, review_created_at, company_name, user_position, user_id, review_cons, review_title) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) returning *', [reviewPros, reviewRating, reviewCreatedAt, companyName, userPosition, userID, reviewCons, reviewTitle])
+    addReviewQuery.rows[0].username=username
     res.status(200).json(
       {
         wasAdded: true,
@@ -34,7 +36,9 @@ router.post('/add', async(req, res) => {
   } catch(err) {
     res.status(400).json(
       {
-        message: 'Something went wrong'
+        message: 'Something went wrong',
+        error: err.message,
+        wasAdded: false
       }
     )
   }

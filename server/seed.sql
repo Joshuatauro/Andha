@@ -1,5 +1,5 @@
 CREATE TABLE users (
-  id VARCHAR NOT NULL,
+  id  VARCHAR UNIQUE NOT NULL DEFAULT uuid_generate_v4(),
   username  VARCHAR UNIQUE,
   email VARCHAR PRIMARY KEY NOT NULL,
   hashedPassword VARCHAR NOT NULL ,
@@ -10,34 +10,30 @@ CREATE TABLE users (
 
 CREATE TABLE posts (
   post_id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
-  username VARCHAR NOT NULL,
+  user_id VARCHAR NOT NULL,
   post_title VARCHAR NOT NULL,
   post_body VARCHAR NOT NULL,
   post_flair VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL,
-  is_edited BOOLEAN DEFAULT FALSE
+  is_edited BOOLEAN DEFAULT FALSE,
+
+  FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE SET DEFAULT
 );
 
 CREATE TABLE comments (
   comment_id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
   parent_comment_id VARCHAR,
   comment_body VARCHAR NOT NULL,
-  username VARCHAR NOT NULL,
+  user_id VARCHAR NOT NULL,
   parent_postid VARCHAR NOT NULL,
-  created_at TIMESTAMP NOT NULL
-);
+  created_at TIMESTAMP NOT NULL,
+  is_edited BOOLEAN DEFAULT FALSE
 
-CREATE TABLE comment_reply (
-  comment_reply_id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
-  parent_commentID VARCHAR NOT NULL,
-  reply_comment_body VARCHAR NOT NULL,
-  username VARCHAR NOT NULL,
-  created_at TIMESTAMP NOT NULL
-);
-
-CREATE TABLE likes (
-  username VARCHAR NOT NULL,
-  parent_postid VARCHAR NOT NULL
+  FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE SET DEFAULT
 );
 
 CREATE TABLE salaries (
@@ -45,8 +41,12 @@ CREATE TABLE salaries (
   company_name VARCHAR NOT NULL,
   company_job_title VARCHAR NOT NULL,
   salary INT NOT NULL,
-  username VARCHAR NOT NULL,
-  company_industry VARCHAR NOT NULL
+  user_id VARCHAR NOT NULL,
+  company_industry VARCHAR NOT NULL,
+
+  FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE SET DEFAULT
 );
 
 CREATE TABLE companies (
@@ -64,17 +64,23 @@ CREATE TABLE companies (
 CREATE TABLE reviews (
   review_id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
   review_rating INT NOT NULL,
-  review_body VARCHAR NOT NULL,
   review_created_at TIMESTAMP DEFAULT NOW(),
   company_name VARCHAR NOT NULL,
-  username VARCHAR NOT NULL DEFAULT NULL,
+  user_id VARCHAR NOT NULL DEFAULT NULL,
   user_position VARCHAR NOT NULL,
+  review_pros VARCHAR NOT NULL,
+  review_cons VARCHAR NOT NULL,
+  review_title VARCHAR NOT NULL,
+
+  FOREIGN KEY(user_id)
+    REFERENCES users(id)
+    ON DELETE SET DEFAULT,
 
   FOREIGN KEY(company_name)
     REFERENCES companies(company_name)
-    ON DELETE SET DEFAULT,
-
-  FOREIGN KEY(username)
-    REFERENCES users(username)
     ON DELETE SET DEFAULT
 );
+
+CREATE TABLE FLAIRS (
+  flair VARCHAR UNIQUE NOT NULL
+)

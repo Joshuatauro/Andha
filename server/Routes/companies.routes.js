@@ -89,7 +89,7 @@ router.get("/:companyName", async(req, res) => {
                                                   companies.company_name
                                               HAVING 
                                                 companies.company_name ILIKE $1`, [companyName])
-    const getCompanyReviews = await db.query('SELECT * FROM reviews WHERE company_name ILIKE $1', [companyName])
+    const getCompanyReviews = await db.query('SELECT * FROM reviews WHERE company_name ILIKE $1 ORDER BY review_created_at DESC', [companyName])
 
     res.status(200).json(
       {
