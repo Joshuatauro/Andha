@@ -4,7 +4,7 @@ export default function GetUserPreference(){
   useEffect(() => {
     const userPreference = localStorage.getItem('theme')
 
-  const root = window.document.documentElement
+    const root = window.document.documentElement
 
 
     if(userPreference === 'dark') {

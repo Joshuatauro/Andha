@@ -37,6 +37,9 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
 
   const handleTopLevelDeleteClick = async() => {
     const didDeleteComment = await deleteComment(commentID, username)
+    if(didDeleteComment) {
+      setIsEditing(false)
+    }
   } 
 
   const componentDecorator = (href, text, key) => (
@@ -66,11 +69,9 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
   }
 
   const replyCommentDelete = async(replyCommentID, replyCreatorUsername) => {
-    console.log('object')
     const { data } = await axios.post('http://localhost:5000/api/comments', { commentID: replyCommentID,  username: replyCreatorUsername }, { withCredentials:true })
     if(data.wasDeleted){
-      console.log(data)
-      setChildrenComments([...childrenComments.filter(comment => comment.comment_id !== replyCommentID)])
+      setChildrenComments([...childrenComments.filter(comment => comment.comment_id === replyCommentID ? comment.comment_body = '[deleted]' : comment)])
       return true
     }
 

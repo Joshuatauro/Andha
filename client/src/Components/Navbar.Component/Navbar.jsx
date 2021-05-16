@@ -20,7 +20,7 @@ const Navbar = () => {
     className="dark:bg-dark-post dark:border-transparent dark:border-dark-flair
     transition-all duration-500 flex sticky top-0 z-50  w-auto bg-white font-noto h-16 border-b-2 border-gray-300">
       <div className="w-11/12 m-auto flex justify-between items-center    ">
-        <h1 onClick={useDarkMode} className='dark:bg-dark-flair dark:text-white font-bold text-xl py-2 px-4 bg-blue-special text-white rounded-lg'>JOBIFY</h1>
+        <h1 className='dark:bg-dark-flair dark:text-white font-bold text-xl py-2 px-4 bg-blue-special text-white rounded-lg'>JOBIFY</h1>
         <ul className="flex">
           <li className="dark:text-white mx-2 text-black ">
             <Link to='/'>
@@ -39,16 +39,33 @@ const Navbar = () => {
           </li>
         </ul>
         <ul className="flex">
-          <li className="mr-5 dark:text-white text-black font-semibold">
-            <Link>
-              <CgMathPlus size={25} />
-            </Link>
-          </li>
-          <li className="dark:text-white  font-semibold text-black">
-            <Link>
-              <RiAccountCircleLine size={25} />
-            </Link>
-          </li>
+          {
+            loggedIn ? 
+              (
+                <>
+                  <li className="mr-5 dark:text-white text-black font-semibold">
+                    <Link to="/create"> 
+                      <CgMathPlus size={25} />
+                    </Link>
+                  </li>
+                  <li className="dark:text-white  font-semibold text-black">
+                    <Link to="/settings">
+                      <RiAccountCircleLine size={25} />
+                    </Link>
+                  </li>
+                </>
+              ) : 
+              (
+                <>
+                  <li className="dark:text-white mx-2 text-black">
+                    <Link to="/login">
+                      <h1 className='font-bold text-md py-1 px-4 bg-green-flair text-white rounded-lg'>Login</h1>
+                    </Link>
+                  </li>
+                </>
+              )
+          }
+          
           
         </ul>
       </div>

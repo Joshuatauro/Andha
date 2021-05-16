@@ -1,4 +1,4 @@
- 
+
 const SkeletonSinglePost = () => (
   <div className="animate-pulse w-11/12 m-auto py-8">
     <div className=" bg-green-flair w-20 h-7 rounded-md"></div>

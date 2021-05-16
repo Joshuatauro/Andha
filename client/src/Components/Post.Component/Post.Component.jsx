@@ -10,8 +10,8 @@ const PostComponent = ({props}) => {
   const { is_edited, post_body, post_title, created_at, post_flair, username, post_id, comment_count } = props
 
   return (
-    <article className="dark:bg-dark-post transition-all duration-500 w-full h-auto  bg-white font-noto rounded-lg shadow-lg" style={{"height": "fit-content"}}>
-      <div className="w-11/12 m-auto py-8">
+    <article className="dark:bg-dark-post transition-all duration-500 w-full max-h-96  bg-white font-noto rounded-lg shadow-lg" style={{"height": "fit-content"}}>
+      <div className="w-11/12 m-auto py-8 ">
 
         <Link to={`/flair/${post_flair}`} className="flex  justify-start font-medium text-xs rounded-md text-white w-max  py-1.5 px-2" style={{"background-color": "#00AE81"}} >
           {post_flair}
@@ -22,8 +22,8 @@ const PostComponent = ({props}) => {
             {post_title}
           </h1>
         </Link>
-        <p className="dark:text-gray-400 w-full text-gray-700 flex justify-start text-md whitespace-pre-wrap transition duration-300 text-left"   >
-          {post_body}
+        <p className="dark:text-gray-400 w-full overflow-hidden  text-gray-700 flex justify-start text-md whitespace-pre-wrap transition duration-300 text-left"   >
+          {post_body?.substr(0, 180)}...
         </p>
 
         {/* <SkeletonStack /> */}
@@ -39,7 +39,7 @@ const PostComponent = ({props}) => {
           <div className="dark:bg-dark-flair transition-all duration-500 bg-light-flair flex items-center py-1.5 px-2  w-max mx-2 rounded-md" >
             <BiTimeFive color={"#fff"} />
             <p className="flex text-xs ml-1 items-center text-white "  >
-              <Moment fromNow ago>{created_at}</Moment>
+              <Moment fromNow >{created_at}</Moment>
             </p>
           </div>
 

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
-
+import Linkify from 'react-linkify';
 
 import Moment from 'react-moment'
 import { BiTimeFive, BiUser } from 'react-icons/bi'
@@ -10,8 +10,10 @@ import { BsChat } from 'react-icons/bs'
 import Comment from '../../Components/Comment.Component/Comment'
 import SkeletonLandingPost from '../../Components/Skeleton.Component/Skeleton.Landing.Post.Component'
 import SkeletonSinglePost from '../../Components/Skeleton.Component/Skeleton.Single.Post.Component'
+import { AuthContext } from '../../State/AuthContext';
 
 const SinglePostPage = () => {
+  const { loggedIn } = useContext(AuthContext)
   const { postID } = useParams()
 
   const [postBody, setPostBody] = useState('')
@@ -47,13 +49,13 @@ const SinglePostPage = () => {
 
       //* CONTAINS ALL NON PARENT COMMENTS, SO ROOT COMMENTS DONT HAVE TO SEARCH ORIGINAL COMMENTS ARRAY FOR CHILDREN
       setReplyComments(data.comments.filter(comment => comment.parent_comment_id !== null))
+      isLoading(false)
+      // if(data){
+      //   setTimeout(() => {
 
-      if(data){
-        setTimeout(() => {
-
-          isLoading(false)
-        }, 900)
-      }
+      //     isLoading(false)
+      //   }, 900)
+      // }
     }
 
     fetchPost(  )
@@ -61,12 +63,18 @@ const SinglePostPage = () => {
 
   const handleCommentSubmit = async(e) => {
     e.preventDefault()
-    const { data } = await axios.post(`http://localhost:5000/api/comments/${postID}`, { comment }, {withCredentials: true})
+    try{
+      // const a = await axios.get('http://localhost:5000/api/auth/token', {withCredentials: true})
 
-    if(data.isSuccess){
-      setComments([data.commentData, ...comments])
-      setCommentCount(prev => prev+1)
-      setComment('')
+      const { data } = await axios.post(`http://localhost:5000/api/comments/${postID}`, { comment }, {withCredentials: true})
+      
+      if(data.isSuccess){
+        setComments([data.commentData, ...comments])
+        setCommentCount(prev => prev+1)
+        setComment('')
+      }
+    } catch(err) {
+      console.log(err)
     }
   }
 
@@ -84,7 +92,8 @@ const SinglePostPage = () => {
   const handleDeleteClick = async(commentID, username) => {
     const { data } = await axios.post('http://localhost:5000/api/comments', {commentID, username}, { withCredentials: true })
     if(data.wasDeleted){
-      setComments([...comments.filter(comment => comment.comment_id === commentID ? comment.username = '[deleted]' : comment)])
+      setComments([...comments.filter(comment => comment.comment_id === commentID ? comment.comment_body = '[deleted]' : comment)])
+      return true
     }
   }
 
@@ -93,7 +102,11 @@ const SinglePostPage = () => {
   }
 
 
-
+  const componentDecorator = (href, text, key) => (
+    <a href={href} className=" dark:text-green-flair text-light-flair" key={key} target="_blank">
+      {text}
+    </a>
+  );
 
 
   return (
@@ -111,10 +124,14 @@ const SinglePostPage = () => {
                   {postFlair}
                 </Link>
                 <h1 className="dark:text-white pt-4 flex text-left justify-start font-black text-3xl text-gray-900">
-                  {postTitle}
+                  <Linkify componentDecorator={componentDecorator}>
+                    {postTitle}
+                  </Linkify>
                 </h1>
-                <p className="dark:text-gray-400 text-gray-700 flex justify-start text-lg whitespace-pre-wrap  text-left">
-                  {postBody}
+                <p className="dark:text-gray-300 text-gray-700 text-lg whitespace-pre-wrap  text-left">
+                <Linkify componentDecorator={componentDecorator}>
+                    {postBody}
+                  </Linkify>
                 </p>
 
                 <div className="flex mt-5">
@@ -142,10 +159,18 @@ const SinglePostPage = () => {
                   </div>
                 </div>
               </div>
-              <form onSubmit={handleCommentSubmit} className="flex w-11/12 m-auto pt-4 flex-col border-b-2 pb-5 dark:border-dark-flair border-gray-300">
-                <textarea value={comment} onChange={e => setComment(e.target.value)} className="dark:text-white text-md w-full px-3 py-2 text-gray-700 h-36 bg-transparent dark:border-gray-700 border-gray-400 border-2 rounded-lg resize-y  outline-none " />
-                <button className=" focus:outline-none w-full mt-2 bg-green-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Submit</button>
-              </form>
+              {
+                loggedIn ? 
+                (
+                  <form onSubmit={handleCommentSubmit} className="flex w-11/12 m-auto pt-4 flex-col border-b-2 pb-5 dark:border-dark-flair border-gray-300">
+                    <textarea value={comment} onChange={e => setComment(e.target.value)} className="dark:text-white text-md flex-g px-3 py-2 text-gray-900 h-36 bg-transparent dark:border-gray-700 hover:ring-green-flair resize-y border-gray-400 border rounded-lg outline-none focus:ring-2 focus:ring-green-flair" />
+                    <button className=" focus:outline-none w-full mt-2 bg-green-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Submit</button>
+                  </form>
+                ) : 
+                (
+                  <h1 className="text-xl w-11/12 m-auto my-3 text-black dark:text-gray-200 font-bold  border-b-2 pb-2 dark:border-dark-flair border-gray-300">Login to be able to comment on posts</h1>
+                )
+              }
               <div className="m-auto w-11/12 ">  
                 <h1 className="dark:text-white duration-500 transition-all text-gray-900 mt-3 font-black text-left text-2xl">Comments</h1>
                   {

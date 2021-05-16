@@ -14,7 +14,7 @@ const LandingPage = () => {
   useEffect(() => {
     const fetchPosts = async() => {
       isLoading(true)
-      const { data } = await axios.get('http://localhost:5000/api/posts')
+      const { data } = await axios.get('http://localhost:5000/api/posts', { withCredentials: true })
       setPosts(data.posts)
       if(data){
         isLoading(false)

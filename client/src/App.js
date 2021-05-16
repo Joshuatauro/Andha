@@ -6,6 +6,8 @@ import SinglePostPage from './Pages/SinglePost.Page/SinglePostPage';
 import LoginPage from './Pages/Login.Page/LoginPage';
 import AllCompanies from './Pages/AllCompanies.Page/AllCompanies';
 import CompanyDetails from './Pages/CompanyDetails.Page/CompanyDetails';
+import CreatePost from './Pages/CreatePost.Page/CreatePost';
+import SettingPage from './Pages/Setting.Page/SettingPage';
 
 function App() {
   return (
@@ -29,6 +31,14 @@ function App() {
               <Route path="/companies/:companyName" exact>
                 <Navbar />
                 <CompanyDetails />
+              </Route>
+              <Route path="/create" exact>
+                <Navbar />
+                <CreatePost />
+              </Route>
+              <Route path="/settings" exact>
+                <Navbar />
+                <SettingPage />
               </Route>
             </Switch>
       </Router>
