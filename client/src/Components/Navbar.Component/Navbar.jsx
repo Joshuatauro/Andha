@@ -34,7 +34,7 @@ const Navbar = () => {
           </li>
           <li className="dark:text-white mx-2 text-black">
             <Link to="/reviews">
-              <h1>Reviews</h1>
+              <h1>Who's hiring</h1>
             </Link>
           </li>
         </ul>

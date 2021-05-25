@@ -6,13 +6,14 @@ export const AuthContext = createContext()
 export const AuthProvider = ({children}) => {
 
   const [loggedIn, setLoggedIn] = useState(false)
-  const [loggedInUsername, setUsername] = useState(null)
+  const [loggedInUserID, setUserID] = useState(null)
+  const [loggedInUsername, setLoggedInUsername] = useState(null)
 
   const checkUserLoggedIn = async() => {
     const { data } = await axios.get('http://localhost:5000/api/auth/check-auth-status', { withCredentials: true })
-    console.log(data)
     setLoggedIn(data.isLoggedIn)
-    setUsername(data.username)
+    setLoggedInUsername(data.username)
+    setUserID(data.userID)
   }
 
   const login = async(username,password) => { 
@@ -22,13 +23,22 @@ export const AuthProvider = ({children}) => {
       setLoggedIn(data.logUserIn)
       return data.logUserIn
     } catch(err) {
-      console.log(err)
+      return false
     }
   }
 
   const signup = async(email, password, username) => {
-    const { data } = axios.post('http://localhost:5000/api/auth/signup', { email, password, username }, { withCredentials: true })
+    const { data } = await axios.post('http://localhost:5000/api/auth/signup', { email, password, username }, { withCredentials: true })
     setLoggedIn(data.logUserIn)
+  }
+
+  const logout = async() => {
+    const { data } = await axios.get('http://localhost:5000/api/auth/logout', {withCredentials: true})
+    if(data.logOutUser){
+      setLoggedIn(false)
+      setUserID(null)
+      return true
+    }
   }
 
 
@@ -41,7 +51,9 @@ export const AuthProvider = ({children}) => {
         login, 
         signup,
         checkUserLoggedIn,
-        loggedInUsername
+        loggedInUsername,
+        loggedInUserID,
+        logout
       }
     }>
       {children}

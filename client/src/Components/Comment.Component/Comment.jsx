@@ -1,14 +1,15 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../../State/AuthContext'
 import { useParams } from 'react-router-dom'
-
 import Moment from 'react-moment'
 import axios from 'axios'
 import Linkify from 'react-linkify';
 import Toast from '../Toast.Component/Toast.Component'
 import ReplyComment from './ReplyComment'
+import { useToast } from '@chakra-ui/react'
 
-const Comment = ({ username, createdAt, commentBody, deleteComment, updateComment, replyComments, commentID, isEdited }) => {
+const Comment = ({ username, createdAt, commentBody, deleteComment, updateComment, replyComments, commentID, isEdited, userID }) => {
+  const toast = useToast()
   const {postID} = useParams()
 
   const [isEditing, setIsEditing] = useState(false)
@@ -21,7 +22,7 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
   const [childrenComments, setChildrenComments] = useState(replyComments.filter(replyComment => replyComment.parent_comment_id === commentID))
 
 
-  const { loggedInUsername } = useContext(AuthContext)
+  const { loggedInUserID } = useContext(AuthContext)
 
   const handleTopLevelCancelClick = () => {
     setIsEditing(false)
@@ -30,6 +31,7 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
   const handleTopLevelEditClick = async() => {
     const didUpdateComments = await updateComment(commentID, comment, username)
     if(didUpdateComments) {
+      
       setIsEditing(false)
     }
 
@@ -52,6 +54,14 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
     e.preventDefault()
     const { data } = await axios.post('http://localhost:5000/api/comments/reply', {parentCommentID: commentID,replyComment, postID}, { withCredentials: true })
     if (data.isSuccess) {
+      toast(
+        {
+          title: "Added comment",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        }
+      )
       setChildrenComments([data.commentData, ...childrenComments])
       isReplying(false)
       setReplyComment('')
@@ -61,6 +71,14 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
   const replyCommentEdit = async(replyCommentID, replyCreatorUsername, replyEditedComment) => {
     const { data } = await axios.put('http://localhost:5000/api/comments', { commentID: replyCommentID, editedComment: replyEditedComment, username: replyCreatorUsername }, { withCredentials:true })
     if(data.wasUpdated){
+      toast(
+        {
+          title: "Edited comment",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        }
+      )
       setChildrenComments([...childrenComments.filter(comment => comment.comment_id === replyCommentID ? comment.comment_body = replyEditedComment : comment)])
       return true
     }
@@ -69,8 +87,17 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
   }
 
   const replyCommentDelete = async(replyCommentID, replyCreatorUsername) => {
+
     const { data } = await axios.post('http://localhost:5000/api/comments', { commentID: replyCommentID,  username: replyCreatorUsername }, { withCredentials:true })
     if(data.wasDeleted){
+      toast(
+        {
+          title: "Deleted comment",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        }
+      )
       setChildrenComments([...childrenComments.filter(comment => comment.comment_id === replyCommentID ? comment.comment_body = '[deleted]' : comment)])
       return true
     }
@@ -122,7 +149,7 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
             
             <div className="flex items-center">
               <button onClick={() => isReplying(!replying)} className="dark:text-gray-400 focus:outline-none text-gray-700 font-bold text-xs mr-2">Reply</button>
-              <button onClick={() => setIsEditing(!isEditing)} className="dark:text-gray-400 focus:outline-none text-gray-700 font-bold text-xs">{loggedInUsername === username ? ("Edit") : ""}</button>
+              <button onClick={() => setIsEditing(!isEditing)} className="dark:text-gray-400 focus:outline-none text-gray-700 font-bold text-xs">{loggedInUserID === userID ? ("Edit") : ""}</button>
             </div>
           </>
           )

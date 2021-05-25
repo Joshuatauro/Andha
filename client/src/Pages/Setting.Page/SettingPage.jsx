@@ -1,29 +1,147 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import  useDarkMode from '../../CustomHooks/useDarkMode'
+import { AuthContext } from '../../State/AuthContext'
+import { useHistory } from 'react-router-dom'
+import { useToast } from '@chakra-ui/toast'
+
 
 const SettingPage = () => {
-
+  const toast = useToast()
+  const { logout, loggedIn } = useContext(AuthContext)
+  const history = useHistory()
   //PROFILE STATE
   const [username, setUsername] = useState('')
   const [bio, setBio] = useState('')
-  const [portfolio, setPortfolio] = useState('')
-  const [linkedIn, setLinkedIn] = useState('')
-  const [location, setLocation] = useState('')
-  const [company, setCompany] = useState('')
-  const [jobTitle, setJobTitle] = useState('')
+  const [portfolio, setPortfolio] = useState()
+  const [linkedIn, setLinkedIn] = useState()
+  const [location, setLocation] = useState()
+  const [company, setCompany] = useState()
+  const [jobTitle, setJobTitle] = useState()
 
   //CHANGE PASSWORD STATE
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [reNewPassword, setReNewPassword] = useState('')
 
+
+  useEffect(() => {
+    const getUserDetails = async() => {
+      const { data } = await axios.get('http://localhost:5000/api/users', { withCredentials: true })
+      console.log(data)
+      const { userDetails } = data
+      setUsername(userDetails.username)
+      setBio(userDetails.bio)
+      setLinkedIn(userDetails.linkedin_url)
+      setPortfolio(userDetails.portfolio_url)
+      setCompany(userDetails.company)
+      setLocation(userDetails.location)
+      setJobTitle(userDetails.job_title)
+    }
+    
+    loggedIn ? getUserDetails() : history.goBack()
+  }, [])
+
+  const updateUserDetails = async(e) => {
+    e.preventDefault()
+    try{
+
+      const { data } = await axios.put('http://localhost:5000/api/users',
+                                      {
+                                        username, linkedIn, portfolio, jobTitle, location, bio, company
+                                      },
+                                      {withCredentials: true})
+  
+      if(data.didUpdate){
+        toast(
+          {
+            title: "Action successful",
+            description: "Updated your profile details",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+            position: "bottom-right"
+          }
+        )
+      }
+    } catch(err) {
+      toast(
+        {
+          title: "Action failed",
+          description: "Could not update your profile details",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "bottom-right"
+        }
+      )
+    }
+  }
+
+  const changePassword = async(e) => {
+    e.preventDefault()
+    try{
+
+      const { data } = await axios.post('http://localhost:5000/api/users/reset-password', 
+      {
+        oldPassword, newPassword, reNewPassword
+      }, 
+      {withCredentials: true})
+      
+      if(data.didUpdate){
+        setOldPassword('')
+        setNewPassword('')
+        setReNewPassword('')
+        toast(
+          {
+            title: "Action successful",
+            description: "Updated your password",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+            position: "bottom-right"
+          }
+        )
+      } 
+    } catch(err) {
+      toast(
+        {
+          title: "Action failed",
+          description: err.response.data.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "bottom-right"
+        }
+      )
+    }
+  }
+
+  const clickedLogout = async() => {
+    const didUserLogOut = await logout()
+    if(didUserLogOut){
+      toast(
+        {
+          title: "Logout successful",
+          description: "Bye! Hope to see you soon",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+          position: "bottom-right"
+        }
+      )
+      history.push('/')
+    }
+
+    
+  }
+
   return (
     <section className="dark:bg-dark-primary font-noto w-full min-h-screen pt-7 pb-16 transition-all duration-500 bg-white-bg">
       <div className="dark:bg-dark-post w-11/12 m-auto h-full rounded-xl py-6  transition-all duration-500 bg-white">
         <section className="m-auto w-11/12">
           <h1 className="text-left text-2xl text-black dark:text-white font-black ">Profile</h1>
-          <form action="" className='mt-4'>
+          <form action="" className='mt-4' onSubmit={updateUserDetails}>
             <div className="flex flex-col">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Username</label>
               <input type="text" value={username} onChange={e => setUsername(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
@@ -63,7 +181,7 @@ const SettingPage = () => {
           </div>
 
           <h1 className="text-left text-2xl text-black mt-16 dark:text-white font-black ">Change Password</h1>
-          <form action="" className='mt-4'>
+          <form onSubmit={changePassword} className='mt-4'>
             <div className="flex flex-col">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Password*</label>
               <input type="password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
@@ -80,6 +198,11 @@ const SettingPage = () => {
               <button className=" focus:outline-none w-auto px-4 mt-2 bg-light-flair dark:bg-dark-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Change password</button>
             </div>
           </form>
+
+          <h1 className="text-left text-2xl text-black mt-16 dark:text-white font-black ">Logout</h1>
+          <div className="flex justify-start">
+            <button onClick={clickedLogout} className=" focus:outline-none w-auto px-4 mt-2 bg-red-500 dark:bg-red-500 py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Logout</button>
+          </div>
         </section>
       </div>
     </section>

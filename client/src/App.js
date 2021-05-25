@@ -1,4 +1,4 @@
-import './App.css';
+import React, { useContext } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Navbar from './Components/Navbar.Component/Navbar';
 import LandingPage from './Pages/Landing.Page/LandingPage';
@@ -8,8 +8,13 @@ import AllCompanies from './Pages/AllCompanies.Page/AllCompanies';
 import CompanyDetails from './Pages/CompanyDetails.Page/CompanyDetails';
 import CreatePost from './Pages/CreatePost.Page/CreatePost';
 import SettingPage from './Pages/Setting.Page/SettingPage';
+import { AuthContext } from './State/AuthContext';
+import UserProfile from './Pages/UserProfile.Page/UserProfile';
+import UserProfileComments from './Pages/UserProfile.Page/UserProfileComments';
+import UserProfileLiked from './Pages/UserProfile.Page/UserProfileLiked';
 
 function App() {
+  const { loggedIn } = useContext(AuthContext)
   return (
     <div className="App">
       <Router>
@@ -37,8 +42,21 @@ function App() {
                 <CreatePost />
               </Route>
               <Route path="/settings" exact>
+                
                 <Navbar />
                 <SettingPage />
+              </Route>
+              <Route path="/user/:username" exact>
+                <Navbar />
+                <UserProfile />
+              </Route>
+              <Route path="/user/:username/comments" exact>
+                <Navbar />
+                <UserProfileComments />
+              </Route>
+              <Route path="/user/:username/liked" exact>
+                <Navbar />
+                <UserProfileLiked />
               </Route>
             </Switch>
       </Router>

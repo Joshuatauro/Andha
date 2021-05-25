@@ -14,6 +14,16 @@ const CreatePost = () => {
   const [flair, setFlair] = useState('General')
 
   const flairOptions = [
+    {value: "Tech", label: "Tech"},
+    {value: "Finance", label: "Finance"},
+    {value: "Hardware & Semiconductor", label: "Hardware & Semiconductor"},
+    {value: "E-Commerce & Retail", label: "E-Commerce & Retail"},
+    {value: "Gaming", label: "Gaming"},
+    {value: "Auto", label: "Auto"},
+    {value: "Media & Entertainment", label: "Media & Entertainment"},
+    {value: "Telecom", label: "Telecom"},
+    {value: "Health", label: "Health"},
+    {value: "Aviation", label: "Aviation"},
     {value:"General" , label: "General"},
     {value:"Software Engineering" , label: "Software Engineering"},
     {value:"Product Management" , label: "Product Management"},

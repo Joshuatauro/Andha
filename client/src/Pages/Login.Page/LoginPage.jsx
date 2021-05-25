@@ -3,10 +3,12 @@ import { FcGoogle } from 'react-icons/fc'
 import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { AuthContext } from '../../State/AuthContext'
+import { useToast } from '@chakra-ui/toast'
 
 
 const LoginPage = () => {
   const history = useHistory()
+  const toast = useToast()
   const { login } = useContext(AuthContext)
 
   const [username, setUsername] = useState('')
@@ -15,10 +17,29 @@ const LoginPage = () => {
   const logInUser = async(e) => {
     e.preventDefault()
     const reRouteUser = await login(username, password)
+
     if(reRouteUser){
+      toast(
+        {
+          title: "Login successful",
+          description: "Hey there, welcome to Jobify",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        }
+      )
       history.push('/')
-    } else {
-      alert('Entered details are wrong')
+    }
+    else {
+      toast(
+        {
+          title: "Login failed",
+          description: "Entered credentials are wrong",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        }
+      )
     }
   }
 
@@ -26,7 +47,7 @@ const LoginPage = () => {
   return (
     <section className="w-full font-noto">
       <div className="grid grid-cols-2 max-h-screen relative">
-        <img src="./watch.png" alt="" className="h-screen object-cover" />
+        <img src="./watch.png" alt="" className="h-screen object-cover w-full" />
         <div className="h-screen flex justify-center items-center" style={{backgroundColor: "#413E51"}}>
           <div className=" w-9/12 m-auto ">
             <h2 className="text-3xl text-left font-black" style={{color: "#55C9FF"}}>Login</h2>

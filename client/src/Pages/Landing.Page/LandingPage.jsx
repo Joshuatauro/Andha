@@ -1,27 +1,26 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import PostComponent from '../../Components/Post.Component/Post.Component'
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import SkeletonLandingPost from '../../Components/Skeleton.Component/Skeleton.Landing.Post.Component'
+import { PostsContext } from '../../State/PostsContext'
 
 
 const LandingPage = () => {
-
-  const [posts, setPosts] = useState([1,2,3,4])
+  const { getPostsFunction, posts } = useContext(PostsContext)
 
   const [loading, isLoading] = useState(false)
   
   useEffect(() => {
     const fetchPosts = async() => {
       isLoading(true)
-      const { data } = await axios.get('http://localhost:5000/api/posts', { withCredentials: true })
-      setPosts(data.posts)
-      if(data){
+      getPostsFunction()
+      if(posts.length > 0){
         isLoading(false)
       }
     }
     fetchPosts()
-  }, [])
+  }, [posts])
   
   return (
     <section className="dark:bg-dark-primary transition-all duration-500 w-full min-h-screen h-full bg-white-bg">

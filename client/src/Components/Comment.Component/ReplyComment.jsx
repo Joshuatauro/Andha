@@ -36,7 +36,7 @@ const ReplyComment = ({replyComment, replyEdit, replyDelete}) => {
 
   
 
-  const { loggedInUsername } = useContext(AuthContext)
+  const { loggedInUserID } = useContext(AuthContext)
 
 
   return (
@@ -72,7 +72,7 @@ const ReplyComment = ({replyComment, replyEdit, replyDelete}) => {
 
             
             <div className="flex items-center">
-            {loggedInUsername === replyComment.username ? (
+            {loggedInUserID === replyComment.user_id ? (
 
               <button onClick={() => setIsEditing(!isEditing)} className="dark:text-gray-400 focus:outline-none text-gray-700  font-bold text-xs">Edit</button>
             ) : ""}
