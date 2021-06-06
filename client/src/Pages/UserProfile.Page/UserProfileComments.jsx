@@ -30,9 +30,6 @@ const UserProfileComments = () => {
                   <li className="mr-7">
                     <Link to={`/user/${username}/liked`} className="text-sm font-semibold text-black dark:text-white">LIKED</Link>
                   </li>
-                  <li className="mr-7">
-                    <Link to="/user" className="text-sm font-semibold text-black dark:text-white">SAVED</Link>
-                  </li>
                 </>
               ) 
               : 

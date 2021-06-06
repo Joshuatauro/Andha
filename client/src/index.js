@@ -6,9 +6,20 @@ import { AuthProvider } from './State/AuthContext';
 import { ChakraProvider } from "@chakra-ui/react"
 import { PostsProvider } from './State/PostsContext';
 import { UserProfileProvider } from './State/UserProfileContext'
+import { extendTheme } from "@chakra-ui/react"
+
+const theme = extendTheme({
+  colors: {
+    greenFlair: {
+      100: "#00AE81",
+    },
+  },
+})
+
+
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <AuthProvider>
         <PostsProvider>
           <UserProfileProvider>

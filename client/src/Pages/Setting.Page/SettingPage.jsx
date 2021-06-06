@@ -27,7 +27,7 @@ const SettingPage = () => {
 
   useEffect(() => {
     const getUserDetails = async() => {
-      const { data } = await axios.get('http://localhost:5000/api/users', { withCredentials: true })
+      const { data } = await axios.get('/api/users', { withCredentials: true })
       console.log(data)
       const { userDetails } = data
       setUsername(userDetails.username)
@@ -39,14 +39,14 @@ const SettingPage = () => {
       setJobTitle(userDetails.job_title)
     }
     
-    loggedIn ? getUserDetails() : history.goBack()
+    loggedIn ? getUserDetails() : history.push('/login')
   }, [])
 
   const updateUserDetails = async(e) => {
     e.preventDefault()
     try{
 
-      const { data } = await axios.put('http://localhost:5000/api/users',
+      const { data } = await axios.put('/api/users',
                                       {
                                         username, linkedIn, portfolio, jobTitle, location, bio, company
                                       },
@@ -82,7 +82,7 @@ const SettingPage = () => {
     e.preventDefault()
     try{
 
-      const { data } = await axios.post('http://localhost:5000/api/users/reset-password', 
+      const { data } = await axios.post('/api/users/reset-password', 
       {
         oldPassword, newPassword, reNewPassword
       }, 
@@ -144,34 +144,34 @@ const SettingPage = () => {
           <form action="" className='mt-4' onSubmit={updateUserDetails}>
             <div className="flex flex-col">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Username</label>
-              <input type="text" value={username} onChange={e => setUsername(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
+              <input type="text" value={username} onChange={e => setUsername(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
             </div>
             <div className="flex flex-col mt-6">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Bio</label>
-              <textarea type="text" value={bio} onChange={e => setBio(e.target.value)} className=" pt-2 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium h-36" />
+              <textarea type="text" value={bio} onChange={e => setBio(e.target.value)} className=" pt-2 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium h-36" />
             </div>
             <div className="flex flex-col mt-6">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Portfolio URL</label>
-              <input type="text" value={portfolio} onChange={e => setPortfolio(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
+              <input type="text" value={portfolio} onChange={e => setPortfolio(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
             </div>
             <div className="flex flex-col mt-6">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">LinkedIn URL</label>
-              <input type="text" value={linkedIn} onChange={e => setLinkedIn(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
+              <input type="text" value={linkedIn} onChange={e => setLinkedIn(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
             </div>
             <div className="flex flex-col mt-6">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Company</label>
-              <input type="text" value={company} onChange={e => setCompany(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
+              <input type="text" value={company} onChange={e => setCompany(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
             </div>
             <div className="flex flex-col mt-6">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Job Title</label>
-              <input type="text" value={jobTitle} onChange={e => setJobTitle(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
+              <input type="text" value={jobTitle} onChange={e => setJobTitle(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
             </div>
             <div className="flex flex-col mt-6">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Location</label>
-              <input type="text" value={location} onChange={e => setLocation(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
+              <input type="text" value={location} onChange={e => setLocation(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
             </div>
             <div className="flex justify-start mt-2">
-              <button className=" focus:outline-none w-1/5 mt-2 bg-green-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Save changes</button>
+              <button className=" focus:outline-none md:w-auto px-4 w-full mt-2 bg-green-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Save changes</button>
             </div>
           </form>
 
@@ -184,18 +184,18 @@ const SettingPage = () => {
           <form onSubmit={changePassword} className='mt-4'>
             <div className="flex flex-col">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Password*</label>
-              <input type="password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
+              <input type="password" value={oldPassword} onChange={e => setOldPassword(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
             </div>
             <div className="flex flex-col mt-6">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">New password*</label>
-              <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
+              <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
             </div>
             <div className="flex flex-col mt-6">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Re-enter new password*</label>
-              <input type="password" value={reNewPassword} onChange={e => setReNewPassword(e.target.value)} className="h-10 w-1/2 rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
+              <input type="password" value={reNewPassword} onChange={e => setReNewPassword(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
             </div>
             <div className="flex justify-start mt-2">
-              <button className=" focus:outline-none w-auto px-4 mt-2 bg-light-flair dark:bg-dark-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Change password</button>
+              <button className=" focus:outline-none md:w-auto w-full px-4 mt-2 bg-light-flair dark:bg-dark-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Change password</button>
             </div>
           </form>
 

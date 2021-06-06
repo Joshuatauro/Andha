@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react'
 import { BiTimeFive, BiUser } from 'react-icons/bi'
-import { BsChat } from 'react-icons/bs'
+import { BsChat, BsHeart, BsHeartFill } from 'react-icons/bs'
 import Moment from 'react-moment'
 import { Link, useParams } from 'react-router-dom'
 import PostComponent from '../../Components/Post.Component/Post.Component'
@@ -9,7 +9,7 @@ import { UserProfileContext } from '../../State/UserProfileContext'
 
 const UserProfile = () => {
   const {username} = useParams()
-  const { loggedInUsername } = useContext(AuthContext)
+  const { loggedInUsername, userID } = useContext(AuthContext)
   const { getUserPostsFunction, userPosts } = useContext(UserProfileContext)
   
   useEffect(() => {
@@ -31,10 +31,7 @@ const UserProfile = () => {
               loggedInUsername === username ? (
                 <>
                   <li className="mr-7">
-                    <Link to="/user" className="text-sm font-semibold text-black dark:text-white">LIKED</Link>
-                  </li>
-                  <li className="mr-7">
-                    <Link to="/user" className="text-sm font-semibold text-black dark:text-white">SAVED</Link>
+                    <Link to={`/user/${username}/liked`} className="text-sm font-semibold text-black dark:text-white">LIKED</Link>
                   </li>
                 </>
               ) 
@@ -58,6 +55,9 @@ const UserProfile = () => {
 }
 
 const PostPreview = ({props}) => {
+  const { loggedInUserID } = useContext(AuthContext)
+  
+
   return (
     <div className="w-full h-auto mt-4 bg-white rounded-md shadow-md dark:bg-dark-post">
       <div className="m-auto py-5 w-11/12">
@@ -85,10 +85,30 @@ const PostPreview = ({props}) => {
           </div>
 
           <div className="dark:bg-dark-flair transition-all duration-500 bg-light-flair flex items-center w-max py-1.5 px-2  rounded-md">
-            <BsChat color={"#fff"} />
+            <BsChat color={"#fff"}  />
             <p className="flex text-xs ml-1 items-center text-white " >
               {props.comment_count}
             </p>
+
+          </div>
+          <div className="dark:bg-dark-flair transition-all duration-500 ml-2 bg-light-flair flex items-center w-max py-1.5 px-2  rounded-md">
+            {
+              props.liked_by.includes(loggedInUserID) ? (
+                <>
+                  <BsHeartFill color={"#fff"}  />
+                  <p className="flex text-xs ml-1 items-center text-white " >
+                    {props.liked_by.length}
+                  </p>
+                </>
+              ) : (
+                <>
+                <BsHeart color={"#fff"}  />
+                  <p className="flex text-xs ml-1 items-center text-white " >
+                    {props.liked_by.length}
+                  </p>
+                </>
+              )
+            }
           </div>
         </div>
       </div>

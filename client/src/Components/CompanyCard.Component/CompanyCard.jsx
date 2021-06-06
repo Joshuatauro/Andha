@@ -19,26 +19,26 @@ const CompanyCard = ({ companyName, companyIndustry, companyID, companyImage, co
         </div>
         <p className="dark:text-gray-400 text-left text-gray-700 text-md mb-3">{companyAbout}</p>
 
-        <div className="flex mt-1">
-          <div className="dark:bg-dark-flair transition-all duration-500 bg-light-flair flex items-center py-1.5 px-2 w-max rounded-md">
+        <div className="grid grid-cols-2  gap-2 md:flex mt-1">
+          <div className="dark:bg-dark-flair transition-all  duration-500 bg-light-flair flex items-center py-1.5 px-2 w-full md:w-max rounded-md">
             <BiStar color={"#fff"} />
             <h2 className="flex text-xs ml-1 items-center text-white " >
               {Math.round(companyRating*10)/10} ({totalReviews} reviews)
             </h2>
           </div>
-          <div className="dark:bg-dark-flair transition-all duration-500 mx-2 bg-light-flair flex items-center py-1.5 px-2 w-max rounded-md">
+          <div className="dark:bg-dark-flair transition-all  duration-500 bg-light-flair flex items-center py-1.5 px-2 w-full md:w-max rounded-md">
             <BiUser color={"#fff"} />
             <h3 className="flex text-xs ml-1 items-center text-white " >
               {companySize}+
             </h3>
           </div>
-          <div className="dark:bg-dark-flair transition-all  duration-500 bg-light-flair flex items-center py-1.5 px-2 w-max rounded-md">
+          <div className="dark:bg-dark-flair transition-all  duration-500 bg-light-flair flex items-center py-1.5 px-2 w-full md:w-max rounded-md">
             <CgWebsite color={"#fff"} />
             <a href={companyWebsite} target="_blank" rel="noreferrer" className="flex text-xs ml-1 items-center text-white " >
               {companyWebsite}
             </a>
           </div>
-          <div className="dark:bg-dark-flair transition-all duration-500 mx-2 bg-light-flair flex items-center py-1.5 px-2 w-max rounded-md">
+          <div className="dark:bg-dark-flair transition-all  duration-500 bg-light-flair flex items-center py-1.5 px-2 w-full md:w-max rounded-md">
             <BiMapPin color={"#fff"} />
             <h2 className="flex text-xs ml-1 items-center text-white " >
               {companyLocation}

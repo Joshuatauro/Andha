@@ -25,8 +25,9 @@ const SinglePostPage = () => {
   const [postUsername, setPostUsername] = useState('')
   const [isEdited, setIsEdited] = useState(false)
   const [postFlair, setPostFlair] = useState('')
-  const [likedBy, setLikedBy] = useState([])
+  const [likedBy, setLikedBy] = useState()
   const [didUserLike, setDidUserLike] = useState(false)
+  const [spamDisable, setSpamDisable] = useState(false)
 
   const [comment, setComment] = useState('')
   const [commentCount, setCommentCount] = useState(0)
@@ -40,15 +41,16 @@ const SinglePostPage = () => {
   useEffect(() => {
     const fetchPost = async() => {
       isLoading(true)
-      const { data } = await axios.get(`http://localhost:5000/api/posts/${postID}`)
+      const { data } = await axios.get(`/api/posts/${postID}`)
       setPostBody(data.post.post_body)
       setPostTitle(data.post.post_title)
       setPostCreatedAt(data.post.created_at)
       setIsEdited(data.post.is_edited)
       setPostFlair(data.post.post_flair)
       setPostUsername(data.post.username)
-      setLikedBy(data.post.liked_by)
+      setLikedBy(data.post.liked_by.length)
       setDidUserLike(data.post.liked_by.includes(loggedInUserID))
+
   
       //* TO GET ALL ROOT LEVEL COMMENTS ONLY
       setComments(data.comments.filter(comment => comment.parent_comment_id === null))
@@ -70,7 +72,7 @@ const SinglePostPage = () => {
   const handleCommentSubmit = async(e) => {
     e.preventDefault()
     try{
-      const { data } = await axios.post(`http://localhost:5000/api/comments/${postID}`, { comment }, {withCredentials: true})
+      const { data } = await axios.post(`/api/comments/${postID}`, { comment }, {withCredentials: true})
       
       if(data.isSuccess){
         toast(
@@ -98,7 +100,7 @@ const SinglePostPage = () => {
   }
 
   const handleEditClick = async(commentID, editedComment, username) => {
-    const { data } = await axios.put(`http://localhost:5000/api/comments`, { commentID, editedComment, username } , { withCredentials: true })
+    const { data } = await axios.put(`/api/comments`, { commentID, editedComment, username } , { withCredentials: true })
     
     if(data.wasUpdated) {
       toast(
@@ -117,7 +119,7 @@ const SinglePostPage = () => {
   }
 
   const handleDeleteClick = async(commentID, username) => {
-    const { data } = await axios.post('http://localhost:5000/api/comments', {commentID, username}, { withCredentials: true })
+    const { data } = await axios.post('/api/comments', {commentID, username}, { withCredentials: true })
     if(data.wasDeleted){
       toast(
         {
@@ -153,11 +155,28 @@ const SinglePostPage = () => {
   }
 
   const handleUserLike = async() => {
-    
+    const { data } = await axios.get(`/api/posts/${postID}/like`, { withCredentials: true })
+    if(data.wasUpdated){
+      console.log(data)
+      setDidUserLike(true)
+      setLikedBy(data.likedBy.length)
+      setSpamDisable(true)
+      setTimeout(() => setSpamDisable(false), 1000)
+    } 
+    else{
+      alert(data.error.message)
+    }
   }
 
   const handleUserDislike = async() => {
-
+    const { data } = await axios.get(`/api/posts/${postID}/dislike`, { withCredentials: true })
+    if(data.wasDeleted){
+      console.log(data)
+      setDidUserLike(false)
+      setLikedBy(data.likedBy.length)
+      setSpamDisable(true)
+      setTimeout(() => setSpamDisable(false), 1000)
+    }
   }
 
   return (
@@ -215,16 +234,18 @@ const SinglePostPage = () => {
                     didUserLike ? (
 
                       <button onClick={handleUserDislike} className="dark:bg-dark-flair transition-all duration-500 bg-light-flair flex items-center w-max py-1.5 ml-2 px-2  rounded-md">
-                        <BsHeartFill color={"#00AE81"} />
+                        
+                        <BsHeartFill className="text-white " />
                         <p className="flex text-xs ml-1 items-center text-white " >
-                          {likedBy.length}
+                          {likedBy}
                         </p>
                       </button>
                     ) : (
-                      <button onClick={handleUserLike} className="dark:bg-dark-flair transition-all duration-500 bg-light-flair flex items-center w-max py-1.5 ml-2 px-2  rounded-md">
+                      <button disabled={spamDisable} onClick={handleUserLike} className="dark:bg-dark-flair transition-all duration-500 bg-light-flair flex items-center w-max py-1.5 ml-2 px-2  rounded-md">
+                        
                         <BsHeart color={"#fff"} />
                         <p className="flex text-xs ml-1 items-center text-white " >
-                          {likedBy.length}
+                          {likedBy}
                         </p>
                       </button>
                     )

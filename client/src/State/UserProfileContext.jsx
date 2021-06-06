@@ -13,12 +13,12 @@ export const UserProfileProvider = ({children}) => {
 
   const getUserPostsFunction = async(user) => {
     if(userPosts.length === 0) {
-      const { data } = await axios.get(`http://localhost:5000/api/users/posts/${user}`, { withCredentials: true })
+      const { data } = await axios.get(`/api/users/posts/${user}`, { withCredentials: true })
       setUserPosts(data.userPosts)
       setUserComments([])
       setUser(user)
     } else if(user !== userInContext) {
-      const { data } = await axios.get(`http://localhost:5000/api/users/posts/${user}`, { withCredentials: true })
+      const { data } = await axios.get(`/api/users/posts/${user}`, { withCredentials: true })
       setUserPosts(data.userPosts)
       setUserComments([])
       setUser(user)
@@ -26,36 +26,37 @@ export const UserProfileProvider = ({children}) => {
   }
 
   const getUserCommentsFunction = async(user) => {
+    console.log(user)
     if(userComments.length === 0) {
-      const { data } = await axios.get(`http://localhost:5000/api/users/comments/${user}`, { withCredentials: true })
+      const { data } = await axios.get(`/api/users/comments/${user}`, { withCredentials: true })
       setUserComments(data.comments)
       setUser(userInContext)
     } else if (user !== userInContext){
-      const { data } = await axios.get(`http://localhost:5000/api/users/comments/${user}`, { withCredentials: true })
+      const { data } = await axios.get(`/api/users/comments/${user}`, { withCredentials: true })
       setUserComments(data.comments)
       setUser(userInContext)
     }
   }
 
   const getUserLikesFunction = async(user) => {
-    if(userPosts.length === 0) {
-      const { data } = await axios.get(`http://localhost:5000/api/users/liked/${user}`, { withCredentials: true })
+    if(userLikedPosts.length === 0) {
+      const { data } = await axios.get(`/api/users/liked/${user}`, { withCredentials: true })
       setUserLikedPosts(data.posts)
       setUser(userInContext)
     } else if (user !== userInContext){
-      const { data } = await axios.get(`http://localhost:5000/api/users/liked/${user}`, { withCredentials: true })
-      setUserComments(data.posts)
+      const { data } = await axios.get(`/api/users/liked/${user}`, { withCredentials: true })
+      setUserLikedPosts(data.posts)
       setUser(userInContext)
     }
   }
 
   const getUserSavedFunction = async(user) => {
     if(userPosts.length === 0) {
-      const { data } = await axios.get(`http://localhost:5000/api/users/comments/${user}`, { withCredentials: true })
+      const { data } = await axios.get(`/api/users/comments/${user}`, { withCredentials: true })
       setUserSavedPosts(data.posts)
       setUser(userInContext)
     } else if (user !== userInContext){
-      const { data } = await axios.get(`http://localhost:5000/api/users/comments/${user}`, { withCredentials: true })
+      const { data } = await axios.get(`/api/users/comments/${user}`, { withCredentials: true })
       setUserComments(data.posts)
       setUser(userInContext)
     }

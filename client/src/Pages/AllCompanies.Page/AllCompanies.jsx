@@ -11,7 +11,7 @@ const AllCompanies = () => {
 
   useEffect(() => {
     const getCompanies = async() => {
-      const { data } = await axios.get('http://localhost:5000/api/companies', { withCredentials: true })
+      const { data } = await axios.get('/api/companies', { withCredentials: true })
       setCompanies(data.companies)
       console.log(data)
     }
@@ -29,9 +29,9 @@ const AllCompanies = () => {
         <h1 className=" dark:text-white font-black text-left text-3xl">Top companies</h1>
         <p className="dark:text-gray-400 text-gray-700 flex justify-start text-md whitespace-pre-wrap  text-left">Check out some of the top companies to work for considering many factors like competitive salaries, good WLB(work-life balance)</p>
 
-        <form onSubmit={findCompany} action="" className="pt-4 flex items-center">
+        <form onSubmit={findCompany} action="" className="pt-4 grid grid-cols-1 md:flex items-center">
           <input type="text" value={companySearch} onChange={e => setCompanySearch(e.target.value)} placeholder="Search your company" className="dark:text-white text-md flex-g px-3 py-2 text-gray-900 h-12 w-full bg-transparent dark:border-gray-700 hover:ring-green-flair resize-y border-gray-400 border rounded-lg outline-none focus:ring-2 focus:ring-green-flair" />
-          <button type="submit" className="focus:outline-none px-12 ml-2 h-12 bg-green-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Search</button>
+          <button type="submit" className="focus:outline-none px-12 mt-2 md:ml-2 h-12 bg-green-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Search</button>
         </form>
       <div className="py-4">
         {

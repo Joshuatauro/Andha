@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react'
 import axios from 'axios'
-import Select from 'react-select'
+import { Select } from "@chakra-ui/react"
 import { useHistory } from 'react-router'
 import { AuthContext } from '../../State/AuthContext'
 
@@ -64,81 +64,23 @@ const CreatePost = () => {
     {value:"Side Jobs" , label: "Side Jobs"},
     {value:"Food & Dining" , label: "Food & Dining"}]
 
-    const customStyles = {
-      menu: (provided, state) => ({
-        ...provided,
-        width: '100%',
-        backgroundColor: "white",
-        color: state.selectProps.menuColor,
-        padding: 20,
-      }),
-
-      option: (styles) => {
-        return {
-          ...styles,
-          width: "100%",
-          color: 'black',
-        };
-      },
-
-      indicatorsContainer: () => (
-        {
-          display: "flex",
-          margin: "0"
-        }
-      ),
-
-      valueContainer: () => (
-        {
-          padding: 0,
-          
-        }
-      ),
-
-    
-      control: (_, { selectProps: { width="100%" }}) => ({
-        width: "100%",
-        display: "flex",
-        backgroundColor: "transparent",
-        // border: "solid gray",
-        borderRadius: "0.375rem",
-        color: "white"
-      }),
-    
-      singleValue: (provided, state) => {
-        const width = "100%";
-        const transition = 'opacity 300ms';
-        const backgroundColor = "#00AE81";
-        const color = "white"
-        const height= "100%"
-        const display = "flex"
-        const justifyContent = "center"
-        const placeItems= "center"
-        const borderRadius= "0.375rem";
-        const paddingLeft = "0.5rem"
-        // const paddingRight = "0.5rem"
-    
-        return { ...provided, color ,width, transition, backgroundColor, height, display, justifyContent, placeItems, borderRadius, paddingLeft};
-      },
-    }
-
     //will reroute user to previous page if he/she is not signed in
     useEffect(() => {
       if(!loggedIn) {
         history.push('/login')
       }
-    })
+    }, [])
     
     const addPost = async(e) => {
       e.preventDefault()
       try {
-        const { data } = await axios.post('http://localhost:5000/api/posts/create', 
+        const { data } = await axios.post('/api/posts/create', 
           {
             title, body, flair
           }, 
           {withCredentials: true}
         )
-        console.log(flair)
+        console.log(data)
         history.push(`/post/${data.postID}`)
       } catch(err) {
 
@@ -155,7 +97,9 @@ const CreatePost = () => {
           </div>
           <div className="flex flex-col text-left my-2">
             <label className="text-sm dark:text-gray-300 text-gray-700 font-bold pl-4 pb-1">Flair*</label>
-            <Select onChange={val => setFlair(val.value)} defaultValue={flairOptions[0]} styles={customStyles} options={flairOptions} />
+            <Select value={flair} onChange={e => setFlair(e.target.value)} color="white" bg="greenFlair.100" borderColor="greenFlair.100">
+              {flairOptions.map(flair => <option className="text-black" value={flair.value}>{flair.label}</option>)}
+            </Select>
           </div>
           <div className="flex w-full flex-col mt-3 mb-2 text-left">
             <label className="text-sm dark:text-gray-300 text-gray-700 font-bold pl-4 pb-1">Body*</label>

@@ -1,26 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 
 import Moment from 'react-moment'
 import { BiTimeFive, BiUser } from 'react-icons/bi'
-import { BsChat, BsHeart } from 'react-icons/bs'
+import { BsChat, BsHeart, BsHeartFill } from 'react-icons/bs'
+import { AuthContext } from '../../State/AuthContext'
 
 const PostComponent = ({props}) => {
+  const {loggedInUserID} = useContext(AuthContext)
 
   const { liked_by, post_body, post_title, created_at, post_flair, username, post_id, comment_count } = props
-
   return (
-    <article className="dark:bg-dark-post transition-all duration-500 w-full max-h-96  bg-white font-noto rounded-lg shadow-lg" style={{"height": "fit-content"}}>
+    <article className="dark:bg-dark-post transition-all duration-500 w-full   bg-white font-noto rounded-lg shadow-lg" style={{"height": "fit-content"}}>
       <div className="w-11/12 m-auto py-8 ">
-        <div className="flex">
-          <div className=" mr-5">
-          <div className="dark:bg-dark-flair transition-all duration-500 bg-light-flair flex  items-center w-auto px-4 py-2 ml-2  rounded-md">
-              <BsHeart color={"#fff"} />
-              <p className="flex text-xs ml-1 items-center text-white " >
-                {liked_by.length}
-              </p>
-            </div>
-          </div>
           <div className=" 3">
             <Link to={`/flair/${post_flair}`} className="flex  justify-start font-medium text-xs rounded-md text-white w-max  py-1.5 px-2" style={{"background-color": "#00AE81"}} >
               {post_flair}
@@ -58,10 +50,20 @@ const PostComponent = ({props}) => {
                   {comment_count}
                 </p>
               </div>
+
+              <div className="dark:bg-dark-flair transition-all duration-500 bg-light-flair flex  items-center w-auto px-2 py-1.5 ml-2  rounded-md">
+                {
+                  liked_by.includes(loggedInUserID) ? (
+                    <BsHeartFill color={"#fff"} />
+                  ) : (<BsHeart color={"#fff"} />)
+                }
+                <p className="flex text-xs ml-1 items-center text-white " >
+                  {liked_by.length}
+                </p>
+              </div>
               
             </div>
           </div>
-        </div>
       </div>
 
     </article>

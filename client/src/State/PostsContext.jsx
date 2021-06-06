@@ -9,15 +9,18 @@ export const PostsProvider = ({children}) => {
 
   const getPostsFunction = async() => {
     if(posts.length === 0) {
-      const { data } = await axios.get('http://localhost:5000/api/posts', { withCredentials: true })
-      console.log(data.posts)
+      const { data } = await axios.get('/api/posts', { withCredentials: true })
       setPosts(data.posts)
+      if(data.posts){
+        return true
+      }
     }
   }
 
   const getFreshBatchOfPosts = async() => {
-    const { data } = await axios.get('http://localhost:5000/api/posts', { withCredentials: true })
+    const { data } = await axios.get('/api/posts', { withCredentials: true })
       setPosts(data.posts)
+      return true
   }
 
   return (
@@ -25,7 +28,8 @@ export const PostsProvider = ({children}) => {
       {
         getPostsFunction,
         getFreshBatchOfPosts,
-        posts
+        posts,
+        setPosts
       }
     }>
       {children}

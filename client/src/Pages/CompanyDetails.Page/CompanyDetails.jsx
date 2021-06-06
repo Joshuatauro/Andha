@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { useParams } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import { BiStar } from 'react-icons/bi'
 import ReviewComponent from '../../Components/Review.Component/ReviewComponent'
+import { toast, useToast } from '@chakra-ui/toast'
 
 const CompanyDetails = () => {
+  const toast = useToast()
+  const history = useHistory()
   const { companyName } = useParams()
 
   const [pros, setPros] = useState('')
@@ -20,7 +23,7 @@ const CompanyDetails = () => {
   const handleReviewSubmit = async(e) => {
     e.preventDefault()
     try {
-      const { data } = await axios.post('http://localhost:5000/api/reviews/add', 
+      const { data } = await axios.post('/api/reviews/add', 
       {
         pros,
         cons,
@@ -49,9 +52,24 @@ const CompanyDetails = () => {
 
   useEffect(() => {
     const getCompanyDetails = async() => {
-      const { data } = await axios.get(`http://localhost:5000/api/companies/${companyName}`)
-      setCompanyDetails(data.companyDetails)
-      setReviews(data.reviews)
+      const { data } = await axios.get(`/api/companies/${companyName}`)
+      if(data.companyDetails){
+        setCompanyDetails(data.companyDetails)
+        setReviews(data.reviews)
+      } else {
+
+        toast(
+          {
+            title: "No such company exists in our database",
+            description: "You can write to use with relevant details @joshuatauro45@gmail.com",
+            duration: null,
+            isClosable: true,
+            position: "bottom-right"
+          }
+        )
+        history.goBack()
+      }
+      
     }
     getCompanyDetails()
   }, [])

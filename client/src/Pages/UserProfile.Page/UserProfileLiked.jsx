@@ -2,18 +2,23 @@ import React, {useState, useEffect, useContext} from 'react'
 import { BiTimeFive, BiUser } from 'react-icons/bi'
 import { BsChat, BsHeart } from 'react-icons/bs'
 import Moment from 'react-moment'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import PostComponent from '../../Components/Post.Component/Post.Component'
 import {AuthContext} from '../../State/AuthContext'
 import { UserProfileContext } from '../../State/UserProfileContext'
 
 const UserProfile = () => {
+  const history = useHistory()
   const {username} = useParams()
   const { loggedInUsername } = useContext(AuthContext)
   const { getUserLikesFunction, userLikedPosts } = useContext(UserProfileContext)
   
   useEffect(() => {
-    getUserLikesFunction(username)
+    if(loggedInUsername === username){
+      getUserLikesFunction(username)
+    } else {
+      history.goBack()
+    }
   }, [])
 
   return (
@@ -32,9 +37,6 @@ const UserProfile = () => {
                 <>
                   <li className="mr-7">
                     <Link to="/user" className="text-sm font-semibold text-black dark:text-white  border-b-2 pb-0.5  border-white">LIKED</Link>
-                  </li>
-                  <li className="mr-7">
-                    <Link to="/user" className="text-sm font-semibold text-black dark:text-white">SAVED</Link>
                   </li>
                 </>
               ) 
@@ -90,7 +92,6 @@ const PostPreview = ({props}) => {
               {props.comment_count}
             </p>
           </div>
-
           <div className="dark:bg-dark-flair transition-all duration-500 bg-light-flair ml-2 flex items-center w-max py-1.5 px-2  rounded-md">
             <BsHeart color={"#fff"} />
             <p className="flex text-xs ml-1 items-center text-white " >
