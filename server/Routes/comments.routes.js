@@ -15,11 +15,10 @@ router.put('/', async(req, res) => {
 
   try {
 
-    const userToken = req.cookies.jwtToken
 
-    if(!userToken) return res.status(401).json({message: "Not authorized to conduct action"})
-    
-    const { userID, username } = jwt.verify(userToken, process.env.JWT_SECRET)
+    const userID = req.userID
+    const username = req.username
+
     
     if(username != creatorUsername) return res.status(401).json({message: 'User is not the owner of the comment'})
 
@@ -118,14 +117,11 @@ router.post('/:postID', async(req, res) => {
   const comment = req.body.comment
 
   try {
-    const userToken = req.cookies.jwtToken
+    if(!req.userID) return res.status(401).json({message: 'Not authorized', wasDeleted: false})
 
-    if(!userToken) return res.status(402).json({message: "Not authorized to conduct action"})
+    const userID = req.userID
+    const username = req.username
 
-    const {userID, username} = jwt.verify(userToken, process.env.JWT_SECRET)
-
-    if(!userID) return res.status(401).json({message: "Not authorized"})
-    console.log(userID)
     let addCommentQuery = await db.query('INSERT INTO comments ( comment_body,parent_comment_id, user_id, parent_postid, created_at) VALUES ($1, NULL ,$2, $3, $4) returning *', [comment, userID, parent_postID, created_at])
     addCommentQuery.rows[0].username = username
 

@@ -26,9 +26,10 @@ app.use(authMiddlewares)
 const authRouter = app.use('/api/auth/', require('./Routes/auth.routes'))
 const postsRouter = app.use('/api/posts/', require('./Routes/posts.routes'))
 const commentsRouter = app.use('/api/comments/', require('./Routes/comments.routes'))
-const companyRouter = app.use('/api/companies', require('./Routes/companies.routes'))
+const companyRouter = app.use('/api/companies/', require('./Routes/companies.routes'))
 const reviewsRouter = app.use('/api/reviews/', require('./Routes/reviews.routes'))
-
+const userRouter = app.use('/api/users/', require('./Routes/users.routes'))
+const jobsRouter = app.use('/api/jobs/', require('./Routes/jobs.routes'))
 
 
 const PORT = process.env.PORT || 5000

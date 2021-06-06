@@ -39,6 +39,8 @@ FROM
             comments ON posts.post_id = comments.parent_postid
         GROUP BY
             posts.post_id
+        HAVING 
+            user_id = $1
         ORDER BY 
             posts.created_at DESC
     ) AS NEW_TABLE
@@ -77,8 +79,45 @@ GROUP BY
 ORDER BY    
     company_rating ASC;
 
-SELECT * FROM comments
-JOIN posts ON post_id = parent_postid
-WHERE parent_postid='8696cf1a-cd23-4278-8c5a-576dbedd50fe' 
+SELECT comment_body, NEW_TABLE.created_at, parent_postid, username, post_title 
+FROM (
+    SELECT 
+        comments.comment_body, comments.created_at, comments.parent_postid, username
+    FROM 
+        comments
+    LEFT JOIN 
+        users ON  id = comments.user_id
+) AS NEW_TABLE
+LEFT JOIN 
+    posts ON post_id = parent_postid;
 
-ALTER TABLE users ADD COLUMN linkedin_url VARCHAR;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT 
+    review_id,
+    review_rating,
+    review_created_at,
+    company_name,
+    user_id,
+    user_position,
+    review_pros,
+    review_cons,
+    review_title,
+    username FROM reviews 
+LEFT JOIN users on users.id = reviews.user_id
+WHERE company_name ILIKE 'Google' ORDER BY review_created_at DESC
+

@@ -27,13 +27,14 @@ router.post('/signup', async(req, res) => {
     const signToken = await jwt.sign(
       {
         userID: signUpUserQuery.rows[0].id,
+        username,
         isAdmin: false
       },
       process.env.JWT_SECRET
     )
   
     //SENDING COOKIE TO FRONTEND 
-    res.cookie('jwtToken', signToken).json({message: "Created account"})
+    res.cookie('jwtToken', signToken, { httpOnly: true } ).json({message: "Logged in successfully", logUserIn: true})
   } catch(err) {
     res.json({message: "error"})
   }
@@ -51,21 +52,30 @@ router.post('/login', async(req, res) => {
 
   if (checkUserExistsQuery.rowCount === 0) return res.status(400).json({message: "No such account exists"})
 
-  //COMPARES THE TWO PASSWORDS AND CHECKS IF ITS TRUE
-  const isUserDetailsCorrect = await bcrypt.compare(password,checkUserExistsQuery.rows[0].hashedpassword)
+  try{
 
-  if(!isUserDetailsCorrect) return res.status(401).json('Either password or username is wrong')
-
-  //CREATING A TOKEN TO BE SENT TO THE FRONTEND
-  const token = jwt.sign(
-    {
-      userID: checkUserExistsQuery.rows[0].id,
-      username,
-      isAdmin: false
-    }, 
-    process.env.JWT_SECRET
-  )
-  res.cookie('jwtToken', token, { httpOnly: true } ).json({message: "Logged in successfully", logUserIn: true})
+    //COMPARES THE TWO PASSWORDS AND CHECKS IF ITS TRUE
+    const isUserDetailsCorrect = await bcrypt.compare(password,checkUserExistsQuery.rows[0].hashedpassword)
+  
+    if(!isUserDetailsCorrect) return res.status(401).json({message:'Either password or username is wrong'})
+  
+    //CREATING A TOKEN TO BE SENT TO THE FRONTEND
+    const token = jwt.sign(
+      {
+        userID: checkUserExistsQuery.rows[0].id,
+        username,
+        isAdmin: false
+      }, 
+      process.env.JWT_SECRET
+    )
+    res.cookie('jwtToken', token, { httpOnly: true } ).json({message: "Logged in successfully", logUserIn: true, username, userID:checkUserExistsQuery.rows[0].id})
+  } catch(err) {
+    res.status(400).json(
+      {
+        message: err.message
+      }
+    )
+  }
 })
 
 router.get('/check-auth-status', async(req, res) => {
@@ -83,6 +93,15 @@ router.get('/check-auth-status', async(req, res) => {
   } catch(err) {
     res.json({message: err})
   }
+})
+
+router.get('/logout', async(req, res) => {
+  res.clearCookie('jwtToken')
+  res.json(
+    {
+      logOutUser: true
+    }
+  )
 })
 
 router.get('/token', async(req, res) => {

@@ -4,8 +4,11 @@ CREATE TABLE users (
   email VARCHAR PRIMARY KEY NOT NULL,
   hashedPassword VARCHAR NOT NULL ,
   company VARCHAR,
-  company_location VARCHAR,
-  job_title VARCHAR
+  location VARCHAR,
+  job_title VARCHAR,
+  linkedin_url VARCHAR,
+  portolio_url VARCHAR,
+  bio VARCHAR DEFAULT 'Hello there, welcome to my profile' 
 );
 
 CREATE TABLE posts (
@@ -16,6 +19,8 @@ CREATE TABLE posts (
   post_flair VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL,
   is_edited BOOLEAN DEFAULT FALSE,
+  liked_by TEXT[],
+  search_helper tsvector
 
   FOREIGN KEY(user_id)
     REFERENCES users(id)
@@ -29,25 +34,14 @@ CREATE TABLE comments (
   user_id VARCHAR NOT NULL,
   parent_postid VARCHAR NOT NULL,
   created_at TIMESTAMP NOT NULL,
-  is_edited BOOLEAN DEFAULT FALSE
+  is_edited BOOLEAN DEFAULT FALSE,
+  liked_by TEXT[],
 
   FOREIGN KEY(user_id)
     REFERENCES users(id)
     ON DELETE SET DEFAULT
 );
 
-CREATE TABLE salaries (
-  id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
-  company_name VARCHAR NOT NULL,
-  company_job_title VARCHAR NOT NULL,
-  salary INT NOT NULL,
-  user_id VARCHAR NOT NULL,
-  company_industry VARCHAR NOT NULL,
-
-  FOREIGN KEY(user_id)
-    REFERENCES users(id)
-    ON DELETE SET DEFAULT
-);
 
 CREATE TABLE companies (
   company_id VARCHAR UNIQUE  DEFAULT uuid_generate_v4(),
@@ -81,6 +75,14 @@ CREATE TABLE reviews (
     ON DELETE SET DEFAULT
 );
 
-CREATE TABLE FLAIRS (
-  flair VARCHAR UNIQUE NOT NULL
+CREATE TABLE jobs (
+  job_id VARCHAR PRIMARY KEY DEFAULT uuid_generate_v4(),
+  job_title VARCHAR NOT NULL,
+  job_company VARCHAR NOT NULL,
+  job_location VARCHAR NOT NULL,
+  job_created_at TIMESTAMP NOT NULL,
+  job_desc VARCHAR NOT NULL,
+  job_apply_at VARCHAR NOT NULL,
+  job_is_approved BOOLEAN DEFAULT FALSE,
+  search_helper tsvector
 )

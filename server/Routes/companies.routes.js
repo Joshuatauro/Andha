@@ -1,8 +1,5 @@
 const router = require('express').Router()
 const db = require('../dbConnection')
-const {v4: uuidv4} = require('uuid')
-
-const jwt = require("jsonwebtoken");
 
 router.post("/add", async(req, res) => {
   const companyName = req.body.companyName
@@ -18,13 +15,7 @@ router.post("/add", async(req, res) => {
 
     if(!companySize || !companyWebsite || !companyName || !companyAbout || !companyLocation || !companyIndustry || !companyLogo) return res.status(400).json({message: "Missing fields"})
 
-    const userToken = req.cookies.jwtToken
-
-    if(!userToken) return res.status(401).json({message: 'Not authorized'})
-
-    const { username } = jwt.verify(userToken, process.env.JWT_SECRET)
-
-    if(!username) return res.status(401).json({message: 'Not authorized'})
+    if(!req.userID) return res.status(401).json({message: 'Not authorized', wasDeleted: false})
 
     const addToCompaniesQuery = await db.query('INSERT INTO companies (company_name, company_industry, company_location, company_about, company_founded, company_website, company_size, company_logo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) returning *', [companyName, companyIndustry, companyLocation, companyAbout, companyFounded, companyWebsite, companySize, companyLogo])
     res.status(200).json(
@@ -89,7 +80,20 @@ router.get("/:companyName", async(req, res) => {
                                                   companies.company_name
                                               HAVING 
                                                 companies.company_name ILIKE $1`, [companyName])
-    const getCompanyReviews = await db.query('SELECT * FROM reviews WHERE company_name ILIKE $1 ORDER BY review_created_at DESC', [companyName])
+    const getCompanyReviews = await db.query(`
+                                              SELECT 
+                                                  review_id,
+                                                  review_rating,
+                                                  review_created_at,
+                                                  company_name,
+                                                  user_id,
+                                                  user_position,
+                                                  review_pros,
+                                                  review_cons,
+                                                  review_title,
+                                                  username FROM reviews 
+                                              LEFT JOIN users on users.id = reviews.user_id
+                                              WHERE company_name ILIKE $1 ORDER BY review_created_at DESC`, [companyName])
 
     res.status(200).json(
       {
