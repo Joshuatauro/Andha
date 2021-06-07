@@ -3,6 +3,8 @@ const db = require('../dbConnection')
 
 router.get('/' ,async(req, res) => {
   const offset = req.query.l || 0
+
+  res.json({message: "hello world"})
   try{
 
     const getPostsQuery = await db.query(`SELECT 

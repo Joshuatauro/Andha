@@ -14,13 +14,14 @@ app.use(express.json())
 
 if(process.env.NODE_ENV === 'production'){
   app.use(express.static(path.join(__dirname, "client/build")))
-  const authRouter = app.use('/api/auth/', require('./Routes/auth.routes'))
-  const postsRouter = app.use('/api/posts/', require('./Routes/posts.routes'))
-  const commentsRouter = app.use('/api/comments/', require('./Routes/comments.routes'))
-  const companyRouter = app.use('/api/companies/', require('./Routes/companies.routes'))
-  const reviewsRouter = app.use('/api/reviews/', require('./Routes/reviews.routes'))
-  const userRouter = app.use('/api/users/', require('./Routes/users.routes'))
-  const jobsRouter = app.use('/api/jobs/', require('./Routes/jobs.routes'))
+  
+  app.use('/api/auth/', require('./Routes/auth.routes'))
+  app.use('/api/posts/', require('./Routes/posts.routes'))
+  app.use('/api/comments/', require('./Routes/comments.routes'))
+  app.use('/api/companies/', require('./Routes/companies.routes'))
+  app.use('/api/reviews/', require('./Routes/reviews.routes'))
+  app.use('/api/users/', require('./Routes/users.routes'))
+  app.use('/api/jobs/', require('./Routes/jobs.routes'))
 
   app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
