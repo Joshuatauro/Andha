@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
 const jwt = require("jsonwebtoken");
 const path = require('path')
+const { send } = require('process')
 const app = express()
 
 app.use(morgan('dev'))
@@ -26,6 +27,11 @@ const authMiddlewares  = async(req, res,next) => {
 }
 
 app.use(authMiddlewares)
+
+app.get("/", (req, res) => {
+  send("Hello world")
+})
+
 
 const authRouter = app.use('/api/auth/', require('./Routes/auth.routes'))
 const postsRouter = app.use('/api/posts/', require('./Routes/posts.routes'))
