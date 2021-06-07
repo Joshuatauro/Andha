@@ -1,6 +1,5 @@
 const router = require('express').Router()
 const db = require('../dbConnection')
-const {v4: uuidv4} = require('uuid')
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -19,7 +18,7 @@ router.post('/signup', async(req, res) => {
   const salt = await bcrypt.genSalt();
   const passwordHash = await bcrypt.hash(password, salt) //HASHED PASSWORD 
 
-  const signUpUserQuery = await db.query(`INSERT INTO users(id, username, email, hashedpassword) VALUES ($1, $2, $3, $4) returning id`, [uuidv4(), username, email, passwordHash ])
+  const signUpUserQuery = await db.query(`INSERT INTO users(username, email, hashedpassword) VALUES ($1, $2, $3) returning id`, [ username, email, passwordHash ])
 
   try{
     
