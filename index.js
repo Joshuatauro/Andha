@@ -29,7 +29,7 @@ const authMiddlewares  = async(req, res,next) => {
 app.use(authMiddlewares)
 
 app.get("/", (req, res) => {
-  send("Hello world")
+  res.send("Hello world")
 })
 
 
