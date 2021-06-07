@@ -9,7 +9,7 @@ const UserCard  = () => {
 
   useEffect(() => {
     const getUserDetails = async() => {
-      const {data} = await axios.get(`http://localhost:5000/api/users${username}`, { withCredentials: true })
+      const {data} = await axios.get(`/api/users${username}`, { withCredentials: true })
       console.log(data)
     }
 

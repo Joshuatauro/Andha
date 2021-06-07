@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
 import queryString from 'query-string'
 import axios from 'axios'
@@ -6,6 +6,7 @@ import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import PostComponent from '../../Components/Post.Component/Post.Component'
 import { useToast } from '@chakra-ui/toast'
 const Search = () => {
+  
   const toast = useToast()
   const { search } = useLocation()
   const queries = queryString.parse(search)

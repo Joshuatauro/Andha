@@ -74,7 +74,7 @@ const CreatePost = () => {
     const addPost = async(e) => {
       e.preventDefault()
       try {
-        const { data } = await axios.post('/api/posts/create', 
+        const { data } = await axios.post(`/api/posts/create`, 
           {
             title, body, flair
           }, 

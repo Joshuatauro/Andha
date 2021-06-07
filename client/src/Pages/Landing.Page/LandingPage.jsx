@@ -5,10 +5,12 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import SkeletonLandingPost from '../../Components/Skeleton.Component/Skeleton.Landing.Post.Component'
 import { PostsContext } from '../../State/PostsContext'
 import {  useToast } from '@chakra-ui/toast'
+import { AuthContext } from '../../State/AuthContext'
 
 
 const LandingPage = () => {
   const toast = useToast()
+  const { url } = useContext(AuthContext)
   const { getPostsFunction, posts, setPosts } = useContext(PostsContext)
 
   const [loading, isLoading] = useState(false)

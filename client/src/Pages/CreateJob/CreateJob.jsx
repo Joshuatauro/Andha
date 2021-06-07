@@ -32,7 +32,7 @@ const CreateJob = () => {
           }, 
           {withCredentials: true}
         )
-        // history.push(`/post/${data.postID}`)
+        history.push(`/post/${data.postID}`)
       } catch(err) {
 
       }

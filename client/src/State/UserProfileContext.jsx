@@ -3,6 +3,8 @@ import axios from 'axios'
 
 export const UserProfileContext = createContext()
 
+const isProd = false
+
 export const UserProfileProvider = ({children}) => {
 
   const [userInContext, setUser] = useState()
@@ -10,6 +12,9 @@ export const UserProfileProvider = ({children}) => {
   const [userComments, setUserComments] = useState([])
   const [userSavedPosts, setUserSavedPosts] = useState([])
   const [userLikedPosts, setUserLikedPosts] = useState([])
+
+  const [url, setUrl] = useState(isProd ? "" : "http://localhost:5000")
+
 
   const getUserPostsFunction = async(user) => {
     if(userPosts.length === 0) {

@@ -119,7 +119,7 @@ const SinglePostPage = () => {
   }
 
   const handleDeleteClick = async(commentID, username) => {
-    const { data } = await axios.post('/api/comments', {commentID, username}, { withCredentials: true })
+    const { data } = await axios.post(`/api/comments`, {commentID, username}, { withCredentials: true })
     if(data.wasDeleted){
       toast(
         {

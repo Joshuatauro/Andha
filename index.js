@@ -9,7 +9,7 @@ const app = express()
 
 app.use(morgan('dev'))
 app.use(cookieParser())
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }))
+app.use(cors())
 app.use(express.json())
 
 const authMiddlewares  = async(req, res,next) => {

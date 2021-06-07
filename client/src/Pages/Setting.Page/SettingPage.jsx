@@ -27,7 +27,7 @@ const SettingPage = () => {
 
   useEffect(() => {
     const getUserDetails = async() => {
-      const { data } = await axios.get('/api/users', { withCredentials: true })
+      const { data } = await axios.get(`/api/users`, { withCredentials: true })
       console.log(data)
       const { userDetails } = data
       setUsername(userDetails.username)
@@ -46,7 +46,7 @@ const SettingPage = () => {
     e.preventDefault()
     try{
 
-      const { data } = await axios.put('/api/users',
+      const { data } = await axios.put(`/api/users`,
                                       {
                                         username, linkedIn, portfolio, jobTitle, location, bio, company
                                       },
@@ -82,7 +82,7 @@ const SettingPage = () => {
     e.preventDefault()
     try{
 
-      const { data } = await axios.post('/api/users/reset-password', 
+      const { data } = await axios.post(`/api/users/reset-password`, 
       {
         oldPassword, newPassword, reNewPassword
       }, 

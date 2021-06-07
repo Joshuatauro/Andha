@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import { useHistory, useParams } from 'react-router'
 import { BiStar } from 'react-icons/bi'
@@ -9,6 +9,7 @@ const CompanyDetails = () => {
   const toast = useToast()
   const history = useHistory()
   const { companyName } = useParams()
+
 
   const [pros, setPros] = useState('')
   const [cons, setCons] = useState('')
@@ -23,7 +24,7 @@ const CompanyDetails = () => {
   const handleReviewSubmit = async(e) => {
     e.preventDefault()
     try {
-      const { data } = await axios.post('/api/reviews/add', 
+      const { data } = await axios.post(`/api/reviews/add`, 
       {
         pros,
         cons,

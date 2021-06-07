@@ -7,9 +7,11 @@ export const PostsProvider = ({children}) => {
 
   const [posts, setPosts] = useState([])
 
+
+
   const getPostsFunction = async() => {
     if(posts.length === 0) {
-      const { data } = await axios.get('/api/posts', { withCredentials: true })
+      const { data } = await axios.get(`/api/posts`, { withCredentials: true })
       setPosts(data.posts)
       if(data.posts){
         return true
@@ -17,17 +19,17 @@ export const PostsProvider = ({children}) => {
     }
   }
 
-  const getFreshBatchOfPosts = async() => {
-    const { data } = await axios.get('/api/posts', { withCredentials: true })
-      setPosts(data.posts)
-      return true
-  }
+  // const getFreshBatchOfPosts = async() => {
+  //   const { data } = await axios.get('/api/posts', { withCredentials: true })
+  //     setPosts(data.posts)
+  //     return true
+  // }
 
   return (
     <PostsContext.Provider value={
       {
         getPostsFunction,
-        getFreshBatchOfPosts,
+        // getFreshBatchOfPosts,
         posts,
         setPosts
       }

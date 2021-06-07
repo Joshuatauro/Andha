@@ -52,7 +52,7 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
 
   const replyCommentAdd = async(e) => {
     e.preventDefault()
-    const { data } = await axios.post('http://localhost:5000/api/comments/reply', {parentCommentID: commentID,replyComment, postID}, { withCredentials: true })
+    const { data } = await axios.post(`/api/comments/reply`, {parentCommentID: commentID,replyComment, postID}, { withCredentials: true })
     if (data.isSuccess) {
       toast(
         {
@@ -69,7 +69,7 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
   }
 
   const replyCommentEdit = async(replyCommentID, replyCreatorUsername, replyEditedComment) => {
-    const { data } = await axios.put('http://localhost:5000/api/comments', { commentID: replyCommentID, editedComment: replyEditedComment, username: replyCreatorUsername }, { withCredentials:true })
+    const { data } = await axios.put(`/api/comments`, { commentID: replyCommentID, editedComment: replyEditedComment, username: replyCreatorUsername }, { withCredentials:true })
     if(data.wasUpdated){
       toast(
         {
@@ -88,7 +88,7 @@ const Comment = ({ username, createdAt, commentBody, deleteComment, updateCommen
 
   const replyCommentDelete = async(replyCommentID, replyCreatorUsername) => {
 
-    const { data } = await axios.post('http://localhost:5000/api/comments', { commentID: replyCommentID,  username: replyCreatorUsername }, { withCredentials:true })
+    const { data } = await axios.post(`/api/comments`, { commentID: replyCommentID,  username: replyCreatorUsername }, { withCredentials:true })
     if(data.wasDeleted){
       toast(
         {

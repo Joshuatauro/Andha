@@ -3,14 +3,16 @@ import axios from 'axios'
 
 export const AuthContext = createContext()
 
+
 export const AuthProvider = ({children}) => {
 
   const [loggedIn, setLoggedIn] = useState(false)
   const [loggedInUserID, setUserID] = useState(null)
   const [loggedInUsername, setLoggedInUsername] = useState(null)
 
+
   const checkUserLoggedIn = async() => {
-    const { data } = await axios.get('/api/auth/check-auth-status', { withCredentials: true })
+    const { data } = await axios.get(`/api/auth/check-auth-status`, { withCredentials: true })
     setLoggedIn(data.isLoggedIn)
     setLoggedInUsername(data.username)
     setUserID(data.userID)
@@ -19,7 +21,7 @@ export const AuthProvider = ({children}) => {
   const login = async(username,password) => { 
     try{
       console.log('helo')
-      const { data } = await axios.post('/api/auth/login', { username, password }, {withCredentials: true})
+      const { data } = await axios.post(`/api/auth/login`, { username, password }, {withCredentials: true})
       setLoggedIn(data.logUserIn)
       setLoggedInUsername(data.username)
       setUserID(data.userID)
@@ -31,12 +33,12 @@ export const AuthProvider = ({children}) => {
   }
 
   const signup = async(email, password, username) => {
-    const { data } = await axios.post('/api/auth/signup', { email, password, username }, { withCredentials: true })
+    const { data } = await axios.post(`/api/auth/signup`, { email, password, username }, { withCredentials: true })
     setLoggedIn(data.logUserIn)
   }
 
   const logout = async() => {
-    const { data } = await axios.get('/api/auth/logout', {withCredentials: true})
+    const { data } = await axios.get(`/api/auth/logout`, {withCredentials: true})
     if(data.logOutUser){
       setLoggedIn(false)
       setUserID(null)

@@ -1,5 +1,5 @@
 import { Input, InputGroup, InputLeftAddon } from '@chakra-ui/input'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import JobPostCard from '../../Components/JobPostCard/JobPostCard'
 import { Link } from 'react-router-dom'
@@ -19,7 +19,7 @@ const Hiring = () => {
 
   useEffect(() => {
     const getJobs = async() => {
-      const { data } = await axios.get('/api/jobs')
+      const { data } = await axios.get(`/api/jobs`)
       console.log(data)
       setJobs(data.jobs)
     }
