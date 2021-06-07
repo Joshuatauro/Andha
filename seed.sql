@@ -20,7 +20,7 @@ CREATE TABLE posts (
   created_at TIMESTAMP NOT NULL,
   is_edited BOOLEAN DEFAULT FALSE,
   liked_by TEXT[],
-  search_helper tsvector
+  search_helper tsvector,
 
   FOREIGN KEY(user_id)
     REFERENCES users(id)

@@ -187,9 +187,10 @@ router.get('/:postID', async(req, res) => {
       }
     )
   } catch(err) {
+    
     res.status(400).json(
       {
-        message: "Something went wrong"
+        message: err.message
       }
     )
   }

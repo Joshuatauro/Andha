@@ -4,13 +4,17 @@ require('dotenv').config
 const cookieParser = require('cookie-parser')
 const morgan = require('morgan')
 const jwt = require("jsonwebtoken");
-
+const path = require('path')
 const app = express()
 
 app.use(morgan('dev'))
 app.use(cookieParser())
 app.use(cors())
 app.use(express.json())
+
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static(path.join(__dirname, "client/build")))
+}
 
 const authMiddlewares  = async(req, res,next) => {
   const userToken = req.cookies.jwtToken
