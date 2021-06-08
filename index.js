@@ -12,7 +12,17 @@ app.use(cookieParser())
 app.use(cors())
 app.use(express.json())
 
+const authMiddlewares  = async(req, res,next) => {
+  const userToken = req.cookies.jwtToken
+  if(!userToken) return next()
+  const { userID, username } = jwt.verify(userToken, process.env.JWT_SECRET)  
+  req.userID = userID
+  req.username = username
+  return next()
+}
+
 if(process.env.NODE_ENV === 'production'){  
+  app.use(authMiddlewares)
   app.use('/api/auth/', require('./Routes/auth.routes'))
   app.use('/api/posts/', require('./Routes/posts.routes'))
   app.use('/api/comments/', require('./Routes/comments.routes'))
@@ -28,14 +38,7 @@ if(process.env.NODE_ENV === 'production'){
 
 }
 
-const authMiddlewares  = async(req, res,next) => {
-  const userToken = req.cookies.jwtToken
-  if(!userToken) return next()
-  const { userID, username } = jwt.verify(userToken, process.env.JWT_SECRET)  
-  req.userID = userID
-  req.username = username
-  return next()
-}
+
 
 app.use(authMiddlewares)
 
