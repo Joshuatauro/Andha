@@ -30,7 +30,7 @@ if(process.env.NODE_ENV === 'production'){
   app.use('/api/reviews/', require('./Routes/reviews.routes'))
   app.use('/api/users/', require('./Routes/users.routes'))
   app.use('/api/jobs/', require('./Routes/jobs.routes'))
-  app.use(express.static(path.join(__dirname, "build", 'index.html')))
+  app.use(express.static(path.join(__dirname, "client/build/index.html")))
 
   app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
