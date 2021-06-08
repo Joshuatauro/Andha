@@ -92,7 +92,7 @@ LEFT JOIN
     posts ON post_id = parent_postid;
 
 
-
+INSERT INTO COMPANIES (company_logo, company_name, company_industry, company_location, company_about, company_founded, company_website, company_size) VALUES ('https://spng.pngfind.com/pngs/s/31-317703_apple-logo-png-transparent-svg-vector-freebie-supply.png', 'Apple', 'Consumer Electronics', 'Cupertino, CA', "Apple reinvents entire industries with its products and services, but this is only possible thanks to its diverse collection of thinkers and doers who work together to make each other's ideas stronger. Every decision Apple makes is to deliver the best user experience to its customers through its innovative hardware, software, and services.", '1976', 'https://apple.com', 10000);
 
 
 
