@@ -25,7 +25,7 @@ const LandingPage = () => {
       }
     }
     fetchPosts()
-  }, [posts])
+  }, [])
 
   const handleFetchPosts = async() => {
     setOffset(prev => prev+1)
