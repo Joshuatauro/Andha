@@ -13,7 +13,7 @@ const LandingPage = () => {
   const { url } = useContext(AuthContext)
   const { getPostsFunction, posts, setPosts } = useContext(PostsContext)
 
-  const [loading, isLoading] = useState(false)
+  const [loading, isLoading] = useState(true)
   const [offset, setOffset] = useState(1)
   
   useEffect(() => {
@@ -54,7 +54,7 @@ const LandingPage = () => {
             (
               <ResponsiveMasonry columnsCountBreakPoints={{350: 1, 1020: 2}}>
                 <Masonry gutter="15px">
-                    {posts.map((post) => (
+                    {[1,2,3,4,5,6].map((post) => (
                         <SkeletonLandingPost />
                     ))}
                 </Masonry>
