@@ -7,7 +7,7 @@ CREATE TABLE users (
   location VARCHAR,
   job_title VARCHAR,
   linkedin_url VARCHAR,
-  portolio_url VARCHAR,
+  portfolio_url VARCHAR,
   bio VARCHAR DEFAULT 'Hello there, welcome to my profile' 
 );
 
