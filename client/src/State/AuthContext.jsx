@@ -35,6 +35,7 @@ export const AuthProvider = ({children}) => {
   const signup = async(email, password, username) => {
     const { data } = await axios.post(`/api/auth/signup`, { email, password, username }, { withCredentials: true })
     setLoggedIn(data.logUserIn)
+    return data.logUserIn
   }
 
   const logout = async() => {
