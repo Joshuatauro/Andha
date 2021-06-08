@@ -16,6 +16,7 @@ import Search from './Pages/Search.Page/Search';
 import Hiring from './Pages/Jobs.Page/Hiring';
 import CreateJob from './Pages/CreateJob/CreateJob';
 import MobileNavbar from './Components/Navbar.Component/MobileNavbar';
+import SignUpPage from './Pages/SignUp.Page/SignUp';
 
 function App() {
   const { checkUserLoggedIn } = useContext(AuthContext)
@@ -40,6 +41,7 @@ function App() {
 
             <Switch>
               <Route path="/login" exact component={LoginPage} />
+              <Route path="/signup" exact component={SignUpPage} />
               <Route path="/" exact>
                 <Navbar />
                 <LandingPage />
