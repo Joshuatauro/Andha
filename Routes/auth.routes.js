@@ -35,7 +35,7 @@ router.post('/signup', async(req, res) => {
     //SENDING COOKIE TO FRONTEND 
     res.cookie('jwtToken', signToken, { httpOnly: true } ).json({message: "Logged in successfully", logUserIn: true})
   } catch(err) {
-    res.json({message: "error"})
+    res.json({message: err.message})
   }
 
 })
