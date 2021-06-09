@@ -14,7 +14,6 @@ const AllCompanies = () => {
     const getCompanies = async() => {
       const { data } = await axios.get(`/api/companies`, { withCredentials: true })
       setCompanies(data.companies)
-      console.log(data)
     }
     getCompanies()
   }, [])

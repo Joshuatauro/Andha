@@ -42,11 +42,29 @@ const CompanyDetails = () => {
         setCons('')
         setTitle('')
         setRating('')
+        toast(
+          {
+            description: "Successfully added review",
+            duration: 4000,
+            isClosable: true,
+            position: "bottom-right",
+            status: "success"
+          }
+        )
       }
 
 
     } catch(err){
-      alert(err.message)
+      toast(
+        {
+          title: "Error",
+          description: err.response.data.message,
+          duration: null,
+          isClosable: true,
+          position: "bottom-right",
+          status: "error"
+        }
+      )
     }
   }
 
@@ -62,7 +80,7 @@ const CompanyDetails = () => {
         toast(
           {
             title: "No such company exists in our database",
-            description: "You can write to use with relevant details @joshuatauro45@gmail.com",
+            description: "You can write to us with relevant details @joshuatauro45@gmail.com",
             duration: null,
             isClosable: true,
             position: "bottom-right"
@@ -91,7 +109,7 @@ const CompanyDetails = () => {
           </div>
           <div className="mt-6 text-left ">
             <h1 className="font-black text-2xl">About {companyDetails.company_name}</h1>
-            <ul className="grid grid-cols-2 grid-rows-3 gap-x-12 w-7/12">
+            <ul className="grid grid-cols-1 md:grid-cols-2 grid-rows-3 gap-0 md:gap-x-12 w-full md:w-10/12 lg:w-7/12  ">
               <li className=" mt-2 grid grid-cols-2  grid-rows-1 transition-all duration-500">
                 <h2 className="dark:text-gray-400 text-gray-900 transition-all duration-500">Website</h2>
                 <a href={companyDetails.company_website} target="_blank" rel="noreferrer" className="text-green-flair -ml-10" >{companyDetails.company_website}</a>
@@ -124,18 +142,18 @@ const CompanyDetails = () => {
           <div className="pt-6 text-left">
             <h1 className="font-black text-2xl mb-2">Reviews</h1>
             <form onSubmit={handleReviewSubmit} className="flex w-full pt-4 flex-col pb-5 dark:border-dark-flair ">
-              <div className="flex">
-                <div className="flex w-full flex-col">
+              <div className="grid grid-cols-1 gap-2 md:grid-cols-5">
+                <div className="flex w-full flex-col md:col-span-2">
                   <label className="text-sm dark:text-gray-300 text-gray-700 font-bold pl-4 pb-1">Title*</label>
                   <input value={title} onChange={e => setTitle(e.target.value)} className="dark:text-white text-md flex-g px-3 py-2 text-gray-900 h-10 bg-transparent dark:border-gray-700 hover:ring-green-flair border-gray-400 border rounded-lg outline-none focus:ring-2 focus:ring-green-flair" />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col md:col-span-2">
                   <label className="text-sm dark:text-gray-300 text-gray-700 font-bold pl-4 pb-1">Position*</label>
-                  <input value={position} onChange={e => setPosition(e.target.value)} type="text" className="dark:text-white text-md flex-g px-3 py-2 text-gray-900 h-10 bg-transparent dark:border-gray-700 hover:ring-green-flair border-gray-400 border rounded-lg outline-none focus:ring-2 ml-2 focus:ring-green-flair" />
+                  <input value={position} onChange={e => setPosition(e.target.value)} type="text" className="dark:text-white text-md flex-g px-3 py-2 text-gray-900 h-10 bg-transparent dark:border-gray-700 hover:ring-green-flair border-gray-400 border rounded-lg outline-none focus:ring-2  focus:ring-green-flair" />
                 </div>
                 <div className="flex flex-col">
                   <label className="text-sm dark:text-gray-300 text-gray-700 font-bold pl-4 pb-1">Rating*</label>
-                  <input value={rating} onChange={e => setRating(e.target.value)} type="number" min="1" max="5" className="dark:text-white text-md flex-g px-3 py-2 text-gray-900 h-10 bg-transparent dark:border-gray-700 hover:ring-green-flair border-gray-400 border rounded-lg outline-none focus:ring-2 ml-2 focus:ring-green-flair" />
+                  <input value={rating} onChange={e => setRating(e.target.value)} type="number" min="1" max="5" className="dark:text-white text-md flex-g px-3 py-2 text-gray-900 h-10 bg-transparent dark:border-gray-700 hover:ring-green-flair border-gray-400 border rounded-lg outline-none focus:ring-2  focus:ring-green-flair" />
                 </div>
               </div>
               <div className="flex w-full flex-col mt-2">
