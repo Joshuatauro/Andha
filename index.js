@@ -9,7 +9,7 @@ const app = express()
 
 app.use(morgan('dev'))
 app.use(cookieParser())
-app.use(cors())
+app.use(cors({origin: "https://andha.netlify.app"}))
 app.use(express.json())
 
 const authMiddlewares  = async(req, res,next) => {
