@@ -22,7 +22,7 @@ router.post('/add', async(req, res) => {
     const username = req.username
 
     const userCompany = await db.query('SELECT company FROM users WHERE username = $1', [username])
-    if(companyName !== userCompany.rows[0].company) return res.status(401).json({message: "User does not work in the current company"})
+    if(companyName.toLowerCase() !== userCompany.rows[0].company.toLowerCase()) return res.status(401).json({message: "Cant post review since you do not work in the same company"})
 
     const addReviewQuery = await db.query('INSERT INTO reviews (review_pros, review_rating, review_created_at, company_name, user_position, user_id, review_cons, review_title) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) returning *', [reviewPros, reviewRating, reviewCreatedAt, companyName, userPosition, userID, reviewCons, reviewTitle])
     addReviewQuery.rows[0].username=username

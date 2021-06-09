@@ -15,10 +15,15 @@ app.use(express.json())
 const authMiddlewares  = async(req, res,next) => {
   const userToken = req.cookies.jwtToken
   if(!userToken) return next()
-  const { userID, username } = jwt.verify(userToken, process.env.JWT_SECRET)  
-  req.userID = userID
-  req.username = username
-  return next()
+  try{
+
+    const { userID, username } = jwt.verify(userToken, process.env.JWT_SECRET)  
+    req.userID = userID
+    req.username = username
+    return next()
+  } catch(err){
+    return next()
+  }
 }
 
 if(process.env.NODE_ENV === 'production'){  
