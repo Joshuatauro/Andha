@@ -35,7 +35,7 @@ const Navbar = () => {
     transition-all duration-500 flex top-0 sticky bottom-0 z-50  w-auto bg-white font-noto h-16 border-b-2 border-gray-300">
       <div className="w-11/12 m-auto flex justify-between items-center    ">
         <div className="flex flex-grow items-center">
-          <Link to="/" className='dark:bg-dark-flair w-auto dark:text-white font-bold text-xl py-2 px-4 bg-blue-special text-white rounded-lg'>{isMobileView ? "J" : "JOBIFY"}</Link>
+          <Link to="/" className='dark:bg-dark-flair w-auto dark:text-white font-bold text-xl py-2 px-4 bg-blue-special text-white rounded-lg'>{isMobileView ? "A" : "Andha"}</Link>
           <form action="" onSubmit={handleTextSearch} className="h-full mx-4 w-full ">
             <InputGroup>
               <InputLeftElement
