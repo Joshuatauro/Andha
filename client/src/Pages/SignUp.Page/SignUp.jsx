@@ -4,8 +4,8 @@ import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { AuthContext } from '../../State/AuthContext'
 import { useToast } from '@chakra-ui/toast'
-
-
+import { ImSpinner2 } from 'react-icons/im'
+import { AiFillHome } from 'react-icons/ai'
 const SignUpPage = () => {
   const history = useHistory()
   const toast = useToast()
@@ -15,6 +15,7 @@ const SignUpPage = () => {
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const [rePassword, setRePassword] = useState('')
+  const [fetching, setFetching] = useState(false)
 
   const logInUser = async(e) => {
     e.preventDefault()
@@ -30,6 +31,7 @@ const SignUpPage = () => {
         }
       )
     }else {
+      setFetching(true)
       const reRouteUser = await signup(email, password,username)
       if(reRouteUser){
         toast(
@@ -42,6 +44,7 @@ const SignUpPage = () => {
             position: "bottom-right"
           }
         )
+        setFetching(false)
         history.push('/')
       }
       else {
@@ -55,6 +58,7 @@ const SignUpPage = () => {
             position: "bottom-right"
           }
         )
+        setFetching(false)
       }
     }
 
@@ -70,9 +74,14 @@ const SignUpPage = () => {
           backgroundSize: "48px 84px",
           backgroundPosition: "0 0, 0 0, 24px 42px, 24px 42px, 0 0, 24px 42px",
         }} />
-        <div className="h-screen flex justify-center items-center" style={{"backgroundColor": "#303067"}}>
+        <div className="min-h-screen flex justify-center items-center" style={{"backgroundColor": "#303067"}}>
           <div className=" w-9/12 m-auto ">
-            <h2 className="text-3xl text-left font-black text-white">Sign Up</h2>
+            <div className="flex  h-full ">
+              <Link to="/" className="bg-green-flair px-3 mr-2 rounded-sm flex items-center">
+                <AiFillHome className="text-white" />
+              </Link>
+              <h2 className="text-3xl text-left font-black text-white">Sign Up</h2>
+            </div>
             <form onSubmit={logInUser} className="mt-7">
             <div className="flex flex-col">
                 <label  className="text-xs text-gray-100 font-bold pl-2 pb-1 text-left ">Username</label>
@@ -90,7 +99,16 @@ const SignUpPage = () => {
                 <label  className="text-xs text-gray-100 font-bold pl-2 pb-1 text-left ">Re enter Password</label>
                 <input type="password" value={rePassword} onChange={e => setRePassword(e.target.value)} className=" text-sm flex-g px-3 py-2 text-white h-10 bg-transparent border-gray-400 border rounded-md outline-none focus:ring-1 focus:ring-blue-400 " />
               </div>
-              <button type="submit" className=" focus:outline-none w-full mt-5 py-2 rounded-md duration-300 text-white hover:bg-opacity-90" style={{backgroundColor: "#454DF8"}}>Submit</button>
+              <button type="submit" className=" focus:outline-none flex items-center justify-center w-full mt-5 py-2 rounded-md duration-300 text-white hover:bg-opacity-90" style={{backgroundColor: "#454DF8"}}>
+              {
+                  fetching ? (
+                    <>
+                      <ImSpinner2 className="text-white animate-spin mr-2" />
+                      Submitting
+                    </>
+                  ) : "Submit"
+                }
+              </button>
               <p className="text-left text-xs mt-1 text-white">Already have an account? <Link to="/login" className="text-blue-500" style={{color: "#454DF8"}}> here</Link> </p>
             </form>
           </div>
