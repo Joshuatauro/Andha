@@ -31,7 +31,7 @@ const AllCompanies = () => {
 
         <form onSubmit={findCompany} action="" className="pt-4 grid grid-cols-1 md:flex items-center">
           <input type="text" value={companySearch} onChange={e => setCompanySearch(e.target.value)} placeholder="Search your company" className="dark:text-white text-md flex-g px-3 py-2 text-gray-900 h-12 w-full bg-transparent dark:border-gray-700 hover:ring-green-flair resize-y border-gray-400 border rounded-lg outline-none focus:ring-2 focus:ring-green-flair" />
-          <button type="submit" className="focus:outline-none px-12 mt-2 md:ml-2 h-12 bg-green-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Search</button>
+          <button type="submit" className="focus:outline-none px-12 mt-2 md:mt-0 md:ml-2 h-12 bg-green-flair py-2 rounded-md duration-300 text-white hover:bg-opacity-90">Search</button>
         </form>
       <div className="py-4">
         {
