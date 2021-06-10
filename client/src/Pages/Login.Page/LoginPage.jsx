@@ -45,8 +45,8 @@ const LoginPage = () => {
 
   return (
     <section className="w-full font-noto">
-      <div className="grid grid-cols-3 max-h-screen relative">
-        <div className=" col-span-2" style={{
+      <div className="grid grid-cols-1 md:grid-cols-3 max-h-screen relative">
+        <div className=" hidden md:block col-span-2" style={{
           backgroundColor: "#303067",
           backgroundImage:  "linear-gradient(30deg, #444cf7 12%, transparent 12.5%, transparent 87%, #444cf7 87.5%, #444cf7), linear-gradient(150deg, #444cf7 12%, transparent 12.5%, transparent 87%, #444cf7 87.5%, #444cf7), linear-gradient(30deg, #444cf7 12%, transparent 12.5%, transparent 87%, #444cf7 87.5%, #444cf7), linear-gradient(150deg, #444cf7 12%, transparent 12.5%, transparent 87%, #444cf7 87.5%, #444cf7), linear-gradient(60deg, #444cf777 25%, transparent 25.5%, transparent 75%, #444cf777 75%, #444cf777), linear-gradient(60deg, #444cf777 25%, transparent 25.5%, transparent 75%, #444cf777 75%, #444cf777)",
           backgroundSize: "48px 84px",
