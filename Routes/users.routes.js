@@ -9,7 +9,7 @@ router.get("/", async(req, res) => {
 
     if(!username || !userID) return res.status(401).json({message: "Please sign in to your account"})
 
-    const getUserAccountDetailsQuery = await db.query('SELECT username, company, job_title, location, bio, portfolio_url, linkedin_url  from users WHERE id = $1', [userID])
+    const getUserAccountDetailsQuery = await db.query('SELECT username, company, job_title, location, bio  from users WHERE id = $1', [userID])
 
     res.status(200).json(
       {
@@ -33,8 +33,6 @@ router.put('/', async(req, res) => {
   const jobTitle = req.body.jobTitle 
   const company = req.body.company 
   const username = req.body.username 
-  const linkedIn = req.body.linkedIn
-  const portfolio = req.body.portfolio
   const bio = req.body.bio
   const location = req.body.location
   
@@ -44,7 +42,7 @@ router.put('/', async(req, res) => {
 
     const userID = req.userID
 
-    const updateUserDetailsQuery = await db.query('UPDATE users SET job_title=$1,  company = $2, username=$3, location=$4, portfolio_url=$5, linkedin_url=$6, bio=$7 WHERE id = $8 returning username', [jobTitle, company, username, location, portfolio, linkedIn, bio, userID])
+    const updateUserDetailsQuery = await db.query('UPDATE users SET job_title=$1,  company = $2, username=$3, location=$4, bio=$5 WHERE id = $6 returning username', [jobTitle, company, username, location, bio, userID])
 
       const signToken = await jwt.sign(
         {
