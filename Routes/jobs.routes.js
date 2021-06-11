@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const db = require('../dbConnection')
 
-router.get('', async(req, res) => {
-  const title = req.query.title.replace(/\s/g, "|")
+router.get('/', async(req, res) => {
+  const title = req.query.title?.replace(/\s/g, "|")
   const loc = req.query.loc 
   const offset = req.query.offset || 0
 
