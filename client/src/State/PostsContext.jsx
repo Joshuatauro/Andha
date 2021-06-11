@@ -10,13 +10,11 @@ export const PostsProvider = ({children}) => {
 
 
   const getPostsFunction = async() => {
-    if(posts.length === 0) {
       const { data } = await axios.get(`/api/posts`, { withCredentials: true })
       setPosts(data.posts)
       if(data.posts){
         return true
       }
-    }
   }
 
   // const getFreshBatchOfPosts = async() => {
