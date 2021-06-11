@@ -13,8 +13,6 @@ const SettingPage = () => {
   //PROFILE STATE
   const [username, setUsername] = useState('')
   const [bio, setBio] = useState('')
-  const [portfolio, setPortfolio] = useState()
-  const [linkedIn, setLinkedIn] = useState()
   const [location, setLocation] = useState()
   const [company, setCompany] = useState()
   const [jobTitle, setJobTitle] = useState()
@@ -32,8 +30,6 @@ const SettingPage = () => {
       const { userDetails } = data
       setUsername(userDetails.username)
       setBio(userDetails.bio)
-      setLinkedIn(userDetails.linkedin_url)
-      setPortfolio(userDetails.portfolio_url)
       setCompany(userDetails.company)
       setLocation(userDetails.location)
       setJobTitle(userDetails.job_title)
@@ -48,7 +44,7 @@ const SettingPage = () => {
 
       const { data } = await axios.put(`/api/users`,
                                       {
-                                        username, linkedIn, portfolio, jobTitle, location, bio, company
+                                        username, jobTitle, location, bio, company
                                       },
                                       {withCredentials: true})
   
@@ -150,14 +146,7 @@ const SettingPage = () => {
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Bio</label>
               <textarea type="text" value={bio} onChange={e => setBio(e.target.value)} className=" pt-2 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium h-36" />
             </div>
-            <div className="flex flex-col mt-6">
-              <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Portfolio URL</label>
-              <input type="text" value={portfolio} onChange={e => setPortfolio(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
-            </div>
-            <div className="flex flex-col mt-6">
-              <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">LinkedIn URL</label>
-              <input type="text" value={linkedIn} onChange={e => setLinkedIn(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />
-            </div>
+            
             <div className="flex flex-col mt-6">
               <label htmlFor="" className="text-left text-black dark:text-white text-sm font-medium ">Company</label>
               <input type="text" value={company} onChange={e => setCompany(e.target.value)} className="h-10 md:w-1/2 w-full rounded-md outline-none px-2 bg-transparent border border-dark-flair dark:text-white font-medium" />

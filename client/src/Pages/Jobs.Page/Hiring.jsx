@@ -33,17 +33,14 @@ const Hiring = () => {
           
           <form onSubmit={handleJobSearch} className="grid grid-row-3 gap-3  w-full  lg:grid-cols-5">
             <InputGroup className="h-12   md:mr-3 lg:col-span-2 ">
-              <InputLeftAddon children="What " bgColor="#00AE81" color="white" height="100%" paddingRight="25px" marginRight="4px" borderColor='transparent' />
+              <InputLeftAddon children="What " bgColor="#00AE81" color="white" height="100%" paddingRight="25px" borderColor='transparent' />
               <input type="text" value={title} onChange={e => setTitle(e.target.value)} height="auto" placeholder="Eg: Frontend Developer" className="dark:text-white border-r pl-3 rounded-tr-md border-t border-b border-gray-300 dark:border-gray-700 outline-none w-full bg-transparent rounded-br-md focus:ring-1  focus:ring-inset focus:ring-green-flair" />
             </InputGroup>
             <InputGroup className="h-12 md:mr-3 lg:col-span-2 ">
               <InputLeftAddon children="Where" bgColor="#00AE81" color="white" height="100%" borderColor='transparent' />
               <input type="text" value={location} onChange={e => setLocation(e.target.value)} height="auto" placeholder="Eg: New Delhi" className="dark:text-white border-r pl-3 rounded-tr-md border-t border-b border-gray-300 dark:border-gray-700 outline-none w-full bg-transparent rounded-br-md focus:ring-1  focus:ring-inset focus:ring-green-flair" />
             </InputGroup>
-            {/* <InputGroup width="h-24   md:mr-3 lg:col-span-2">
-              <InputLeftAddon children="Location" bgColor="#00AE81" color="white" height="100%" borderColor='transparent' />
-              <input type="text" value={location} onChange={e => setLocation(e.target.value)} height="auto" placeholder="Eg: New Delhi, India" className="dark:text-white border-r pl-3 rounded-tr-md border-t border-b border-gray-300 dark:border-gray-700 outline-none w-full bg-transparent rounded-br-md focus:ring-1  focus:ring-inset focus:ring-green-flair" />
-            </InputGroup> */}
+
             <button type="submit" onSubmit={handleJobSearch} className="focus:outline-none px-12 h-12 bg-green-flair  rounded-md duration-300 text-white hover:bg-opacity-90">Search</button>
           </form>
           <div className="w-full text-right mt-1">
