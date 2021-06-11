@@ -2,7 +2,7 @@ const router = require('express').Router()
 const db = require('../dbConnection')
 
 router.get('/', async(req, res) => {
-  const title = req.query.title?.replace(/\s/g, "|")
+  let title = req.query.title
   const loc = req.query.loc 
   const offset = req.query.offset || 0
 
@@ -10,6 +10,7 @@ router.get('/', async(req, res) => {
   try{
 
     if(title){
+      title = req.query.title.replace(/\s/g, "|")
       const getJobsWithTitle = await db.query(`SELECT job_id, job_title, job_company, job_location, job_desc, job_apply_at, job_created_at, job_is_approved   
                                   FROM JOBS
                                   WHERE 
