@@ -16,6 +16,8 @@ router.get('/', async(req, res) => {
                                   WHERE 
                                       search_helper @@ to_tsquery($1) AND
                                       job_location ILIKE $2
+                                  ORDER BY
+                                    job_created_at DESC
                                   OFFSET $3
                                   LIMIT 25`,[title, loc ? loc : '%' ,offset*2])
       res.status(200).json(
@@ -28,6 +30,8 @@ router.get('/', async(req, res) => {
                                   FROM JOBS
                                   WHERE 
                                       job_location ILIKE $1
+                                  ORDER BY
+                                    job_created_at DESC
                                   OFFSET $2
                                   LIMIT 25`,[loc ? loc : '%' ,offset*2])
       res.status(200).json(

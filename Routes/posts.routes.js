@@ -20,7 +20,7 @@ router.get('/' ,async(req, res) => {
                                                 GROUP BY
                                                     posts.post_id
                                                 ORDER BY 
-                                                    posts.created_at ASC
+                                                    posts.created_at DESC
                                                 OFFSET $1
                                                 LIMIT 30
                                             ) AS NEW_TABLE
