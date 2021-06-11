@@ -80,7 +80,7 @@ const CompanyDetails = () => {
         toast(
           {
             title: "No such company exists in our database",
-            description: "You can write to us with relevant details @joshuatauro45@gmail.com",
+            description: "You can write to us with relevant details at joshuatauro45@gmail.com",
             duration: null,
             isClosable: true,
             position: "bottom-right"

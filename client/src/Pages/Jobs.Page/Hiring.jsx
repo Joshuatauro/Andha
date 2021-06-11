@@ -3,24 +3,42 @@ import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import JobPostCard from '../../Components/JobPostCard/JobPostCard'
 import { Link } from 'react-router-dom'
-
+import { useToast } from '@chakra-ui/toast'
+import { ImSpinner2 } from 'react-icons/im'
 const Hiring = () => {
+  const toast = useToast()
+
   const [title,setTitle] = useState('')
   const [location, setLocation] = useState('')
-
+  const [fetching ,setFetching] = useState(false)
   const [jobs, setJobs] = useState([])
 
 
   const handleJobSearch = async(e) => {
     e.preventDefault()
+    setFetching(true)
     const { data } = await axios.get(`/api/jobs?title=${title}&loc=${location}`)
     setJobs(data.jobs)
+    if(data.jobs.length === 0){
+      setFetching(false)
+      toast(
+        {
+          title: "No job results found",
+          description: "Sorry, at the moment we don't have any jobs related to your search",
+          duration: "10000",
+          status: "error",
+          isClosable: true,
+          position: "bottom-right"
+        }
+      )
+    } else {
+      setFetching(false)
+    }
   }
 
   useEffect(() => {
     const getJobs = async() => {
       const { data } = await axios.get(`/api/jobs`)
-      console.log(data)
       setJobs(data.jobs)
     }
     getJobs()
@@ -41,7 +59,20 @@ const Hiring = () => {
               <input type="text" value={location} onChange={e => setLocation(e.target.value)} height="auto" placeholder="Eg: New Delhi" className="dark:text-white border-r pl-3 rounded-tr-md border-t border-b border-gray-300 dark:border-gray-700 outline-none w-full bg-transparent rounded-br-md focus:ring-1  focus:ring-inset focus:ring-green-flair" />
             </InputGroup>
 
-            <button type="submit" onSubmit={handleJobSearch} className="focus:outline-none px-12 h-12 bg-green-flair  rounded-md duration-300 text-white hover:bg-opacity-90">Search</button>
+              {
+                fetching ? (
+                  <button type="submit" disabled onSubmit={handleJobSearch} className="focus:outline-none px-12 flex items-center justify-center h-12 bg-green-flair  rounded-md duration-300 text-white hover:bg-opacity-90">
+                    <span className="flex items-center">
+                      <ImSpinner2 className="text-white animate-spin mr-2 " />
+                      Loading
+                    </span>
+                  </button>
+                ) : (
+                  <button type="submit" onSubmit={handleJobSearch} className="focus:outline-none px-12 h-12 bg-green-flair  rounded-md duration-300 text-white hover:bg-opacity-90">
+                   Submit
+                  </button>
+                )
+              }
           </form>
           <div className="w-full text-right mt-1">
             <Link to="/add/job" className="text-sm text-green-flair">Recruiter? Add a job here</Link>
