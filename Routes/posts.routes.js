@@ -19,12 +19,13 @@ router.get('/' ,async(req, res) => {
                                                     comments ON posts.post_id = comments.parent_postid
                                                 GROUP BY
                                                     posts.post_id
-                                                ORDER BY 
-                                                    posts.created_at DESC
+
                                                 OFFSET $1
                                                 LIMIT 30
                                             ) AS NEW_TABLE
-                                          LEFT JOIN users ON id = NEW_TABLE.user_id`, [offset*30])
+                                          LEFT JOIN users ON id = NEW_TABLE.user_id
+                                          ORDER BY
+                                              CREATED_aT DESC`, [offset*30])
   
   
     res.status(200).json(
