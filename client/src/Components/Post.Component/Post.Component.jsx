@@ -5,18 +5,23 @@ import Moment from 'react-moment'
 import { BiTimeFive, BiUser } from 'react-icons/bi'
 import { BsChat, BsHeart, BsHeartFill } from 'react-icons/bs'
 import { AuthContext } from '../../State/AuthContext'
-
+import { AiFillPushpin } from 'react-icons/ai'
 const PostComponent = ({props}) => {
   const {loggedInUserID} = useContext(AuthContext)
 
-  const { liked_by, post_body, post_title, created_at, post_flair, username, post_id, comment_count } = props
+  const { liked_by, post_body, post_title, created_at, post_flair, username, post_id, comment_count, is_sticky } = props
   return (
     <article className="dark:bg-dark-post transition-all duration-500 w-full   bg-white font-noto rounded-lg shadow-lg" style={{"height": "fit-content"}}>
       <div className="w-11/12 m-auto py-8 ">
           <div className=" 3">
+            <div className="flex items-center">
+
             <Link to={`/flair/${post_flair}`} className="flex  justify-start font-medium text-xs rounded-md text-white w-max  py-1.5 px-2" style={{"background-color": "#00AE81"}} >
               {post_flair}
             </Link>
+            {is_sticky ? <AiFillPushpin size={20} className="ml-2 text-green-flair" /> : ""}
+            
+            </div>
             <Link to={`/post/${post_id}`}>
               <h1 className="dark:text-white font-bold text-left justify-start flex mt-1.5 transition duration-300 ease-in-out text-xl text-gray-900 " 
               >
